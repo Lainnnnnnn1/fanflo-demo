@@ -1,5 +1,16 @@
 /* FanFlo 繁花毛织 — 页面逻辑 v2（双语 + 动效） */
 
+/* 标题自动包裹 line-mask（文字遮罩揭示） */
+(function () {
+  try {
+    document.querySelectorAll('.hero-content h1, .section-head h2, .story-grid h2, .page-head h1, .news-card h3, .detail-info h1').forEach(el => {
+      if (el.querySelector('.line-mask')) return;
+      el.innerHTML = '<span class="line-mask"><span>' + el.textContent + '</span></span>';
+      el.classList.add('lm');
+    });
+  } catch (e) { /* noop */ }
+})();
+
 /* ---------- i18n ---------- */
 const I18N = {
   en: {
@@ -9,6 +20,17 @@ const I18N = {
     heroLead: 'No middlemen. No brand markup. Our sweaters come straight off our machines to your door — the price you see is what it costs to make it well.',
     ctaNew: 'Shop New Arrivals', ctaAll: 'Browse All',
     catTitle: 'Shop by Category',
+    brandTitle: 'Eight lines, one mill.',
+    catNavTitle: 'Browse the collection.',
+    freeShipMsg: 'Add ¥{n} more for free shipping',
+    freeShipGot: 'Free shipping unlocked',
+    sortNew: 'Newest', sortPriceAsc: 'Price ↑', sortPriceDesc: 'Price ↓',
+    qaBtn: 'Quick Add',
+    newsLabel: 'Corporate News', newsH: 'From the mill.',
+    news1t: 'How to Style a Sweater Vest — Layering Ideas and B2B Opportunities',
+    news2t: 'Exploring Cardigan Styles: Key Features and Fan Flo\'s Designer Collections',
+    news3t: 'A Manufacturer\'s Look at Pullover Sweaters: Styles, Types, B2B Guide',
+    newsRead: 'Read →',
     newTitle: 'New This Week',
     newHint: 'Just off the machines — 300 pieces per style, then it\'s gone.',
     procLabel: 'The Process',
@@ -26,7 +48,7 @@ const I18N = {
     newsText: 'New styles go to our email list before they hit the site. One email a month, max.',
     newsPh: 'Your email', newsBtn: 'Subscribe', newsOk: 'Got it. You\'ll hear from us first.',
     footerTag: 'Knitwear straight from our own mill — yarn, knitting, shipping, all ours.',
-    footShop: 'Shop', footContact: 'Contact', footCopy: '© 2026 FanFlo 繁花毛织 · Demo', footSlogan: 'Honest fabric, honest prices.',
+    footShop: 'Shop', footContact: 'Contact', footFollow: 'Follow', footCopy: '© 2026 FanFlo 繁花毛织 · Demo', footSlogan: 'Honest fabric, honest prices.',
     pTitle: 'All Products', pSub: 'Every piece comes off our machines, washed, checked and packed by the same hands.',
     pAll: 'All', pCount: 'items', tagNew: 'NEW',
     crumbHome: 'Home', size: 'Size', qty: 'Quantity', add: 'Add to Cart',
@@ -50,6 +72,17 @@ const I18N = {
     heroLead: '没有中间商，没有品牌溢价。我们自己纺纱、自己织造、自己发货——把一件羊毛衫该有的价格，直接标给你。',
     ctaNew: '看新品', ctaAll: '全部商品',
     catTitle: '按品类逛',
+    brandTitle: '八个品类，一间织厂。',
+    catNavTitle: '慢慢逛，挑一件。',
+    freeShipMsg: '再买 ¥{n} 免运费',
+    freeShipGot: '已免运费',
+    sortNew: '最新', sortPriceAsc: '价格 ↑', sortPriceDesc: '价格 ↓',
+    qaBtn: '快速加购',
+    newsLabel: '公司新闻', newsH: '织厂直报。',
+    news1t: '针织背心怎么搭——叠穿思路与 B2B 机会',
+    news2t: '开衫风格详解：要点与 Fan Flo 设计师系列',
+    news3t: '工厂视角看套头毛衣：款式、类型与 B2B 指南',
+    newsRead: '阅读 →',
     newTitle: '本周新品',
     newHint: '刚下织机的一批，每个款 300 件，卖完等下一批。',
     procLabel: '生产流程',
@@ -67,7 +100,7 @@ const I18N = {
     newsText: '每批新品上架前，先发邮件给订阅的人。不刷屏，一月最多两封。',
     newsPh: '你的邮箱', newsBtn: '订阅', newsOk: '已记录，新品上架会第一个通知你。',
     footerTag: '自有织厂直出的羊毛针织。原料、织造、发货，全程自己来。',
-    footShop: '逛逛', footContact: '联系', footCopy: '© 2026 FanFlo 繁花毛织 · 样板站', footSlogan: '面料是诚实的产品',
+    footShop: '逛逛', footContact: '联系', footFollow: '关注', footCopy: '© 2026 FanFlo 繁花毛织 · 样板站', footSlogan: '面料是诚实的产品',
     pTitle: '全部商品', pSub: '每一件都从我们的织机上下来，洗过、验过，才发货。',
     pAll: '全部', pCount: '件商品', tagNew: '新品',
     crumbHome: '首页', size: '尺码', qty: '数量', add: '加入购物车',
@@ -93,7 +126,13 @@ function t(key) { return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key] || key;
 
 function applyLang() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
+    const v = t(el.dataset.i18n);
+    if (el.classList.contains('lm')) {
+      const s = el.querySelector('.line-mask > span');
+      if (s) s.textContent = v;
+    } else {
+      el.textContent = v;
+    }
   });
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPh);
@@ -102,6 +141,16 @@ function applyLang() {
   btns.forEach(b => b.classList.toggle('active', b.dataset.lang === LANG));
   const html = document.documentElement;
   html.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  renderFooterCats();
+}
+
+function renderFooterCats() {
+  document.querySelectorAll('#footerCats').forEach(ul => {
+    ul.innerHTML = CATS.map(c =>
+      '<li><a href="products.html?cat=' + c.key + '">' + c[LANG] + '</a></li>'
+    ).join('') +
+    '<li><a href="products.html">' + t('navAll') + '</a></li>';
+  });
 }
 
 function setLang(l) {
@@ -131,6 +180,7 @@ function cardHTML(p) {
     '<div class="thumb">' + (p.isNew ? '<span class="tag">' + t('tagNew') + '</span>' : '') +
     '<img class="img-a" src="' + p.img + '" alt="' + esc(p.name.en) + '" loading="lazy">' +
     (p.img2 ? '<img class="img-b" src="' + p.img2 + '" alt="" loading="lazy">' : '') +
+    '<button type="button" class="quick-add" data-quick="' + p.id + '">' + t('qaBtn') + '</button>' +
     '</div>' +
     '<div class="card-body"><h3>' + esc(p.name[LANG]) + '</h3>' +
     '<p class="mat">' + esc(p.material[LANG]) + '</p>' +
@@ -146,14 +196,85 @@ function catName(key) {
 function initReveal() {
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+  document.querySelectorAll('.fade-up, .line-mask, .reveal-img').forEach(el => obs.observe(el));
+}
+
+/* ---------- 数字滚动 ---------- */
+function initCountUp() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseFloat(el.dataset.count);
+    if (!target && target !== 0) return;
+    const suffix = el.dataset.suffix || '';
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        obs.unobserve(el);
+        const dur = 1100;
+        const start = performance.now();
+        const tick = now => {
+          const p = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    obs.observe(el);
+  });
+}
+
+/* ---------- 加购飞入购物车 ---------- */
+function flyToCart(fromEl) {
+  const badge = document.getElementById('cartBadge');
+  if (!badge || !fromEl) return;
+  const r1 = fromEl.getBoundingClientRect();
+  const r2 = badge.getBoundingClientRect();
+  const dot = document.createElement('span');
+  dot.className = 'fly-dot';
+  dot.style.left = (r1.left + r1.width / 2) + 'px';
+  dot.style.top = (r1.top + r1.height / 2) + 'px';
+  document.body.appendChild(dot);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      dot.style.transform = 'translate(' + (r2.left - r1.left + r2.width / 2) + 'px, ' + (r2.top - r1.top + r2.height / 2) + 'px) scale(0.15)';
+      dot.style.opacity = '0.2';
+    });
+  });
+  setTimeout(() => dot.remove(), 750);
 }
 
 /* ---------- 首页 ---------- */
+function initBrand() {
+  const grid = document.getElementById('lineGrid');
+  if (grid) {
+    grid.innerHTML = CATS.map((c, i) => {
+      const p = PRODUCTS.find(x => x.cat === c.key);
+      return '<a class="card fade-up d' + ((i % 4) + 1) + '" href="products.html?cat=' + c.key + '">' +
+        '<div class="thumb"><img class="img-a" src="' + (p ? p.img : 'assets/img/hero.jpg') + '" alt="' + c.en + '" loading="lazy"></div>' +
+        '<div class="card-body"><h3>' + c[LANG] + '</h3><p class="mat">' + t('pAll') + '</p></div></a>';
+    }).join('');
+  }
+  initReveal();
+}
+
 function initHome() {
+  const catNav = document.getElementById('catNav');
+  if (catNav) {
+    catNav.innerHTML = CATS.map((c, i) => {
+      const p = PRODUCTS.find(x => x.cat === c.key);
+      return '<a class="cat-block fade-up d' + (i + 1) + '" href="products.html?cat=' + c.key + '">' +
+        '<div class="cat-img"><img src="' + (p ? p.img : 'assets/img/hero.jpg') + '" alt="' + c.en + '" loading="lazy"></div>' +
+        '<div class="cat-meta"><span class="label">0' + (i + 1) + ' / 04</span><h3>' + c[LANG] + '</h3></div>' +
+      '</a>';
+    }).join('');
+  }
   const cats = document.getElementById('cats');
   if (cats) {
     cats.innerHTML = CATS.map((c, i) =>
@@ -188,8 +309,13 @@ function renderProducts() {
   const count = document.getElementById('resultCount');
   const params = new URLSearchParams(location.search);
   const cat = params.get('cat') || '';
+  const sort = params.get('sort') || 'new';
 
-  const list = cat ? PRODUCTS.filter(p => p.cat === cat) : PRODUCTS;
+  let list = cat ? PRODUCTS.filter(p => p.cat === cat) : PRODUCTS.slice();
+  if (sort === 'price-asc') list.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') list.sort((a, b) => b.price - a.price);
+  if (sort === 'new') list.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+
   grid.innerHTML = list.map(cardHTML).join('');
   if (count) count.textContent = list.length + ' ' + t('pCount');
   if (bar) {
@@ -198,6 +324,8 @@ function renderProducts() {
       '<button class="filter-btn' + (o.key === cat ? ' active' : '') + '" data-cat="' + o.key + '">' + o.label + '</button>'
     ).join('');
   }
+  const sortSel = document.getElementById('sortSel');
+  if (sortSel) sortSel.value = sort;
   initReveal();
 }
 
@@ -211,6 +339,15 @@ function initProducts() {
       const url = new URL(location.href);
       if (btn.dataset.cat) url.searchParams.set('cat', btn.dataset.cat);
       else url.searchParams.delete('cat');
+      history.replaceState(null, '', url);
+      renderProducts();
+    });
+  }
+  const sortSel = document.getElementById('sortSel');
+  if (sortSel) {
+    sortSel.addEventListener('change', () => {
+      const url = new URL(location.href);
+      url.searchParams.set('sort', sortSel.value);
       history.replaceState(null, '', url);
       renderProducts();
     });
@@ -292,13 +429,14 @@ function initProduct() {
     Cart.add(p.id, size, qty);
     updateBadge();
     addMsg.style.display = 'block';
+    flyToCart(document.getElementById('addBtn'));
     setTimeout(() => { addMsg.style.display = 'none'; }, 3200);
   });
   initReveal();
 }
 
 /* ---------- 购物车 ---------- */
-function initCart() {
+function initCart(animate) {
   const wrap = document.getElementById('cartWrap');
   if (!wrap) return;
 
@@ -319,6 +457,8 @@ function initCart() {
       '<div class="cart-items" id="cartItems"></div>' +
       '<aside class="summary fade-up in">' +
         '<h3>' + t('sumTitle') + '</h3>' +
+        '<div class="free-ship">' + (ship === 0 ? t('freeShipGot') : t('freeShipMsg').replace('{n}', fmt(FREE_SHIP - subtotal))) + '</div>' +
+        '<div class="ship-bar"><i style="width:' + Math.min(100, Math.round(subtotal / FREE_SHIP * 100)) + '%"></i></div>' +
         '<div class="sum-row items"><span>' + items.length + ' ' + t('pCount') + '</span><span>' + fmt(subtotal) + '</span></div>' +
         '<div class="sum-row"><span>' + t('ship') + '</span><span>' + (ship === 0 ? t('free') : fmt(ship)) + '</span></div>' +
         '<div class="sum-row total"><span>' + t('total') + '</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
@@ -329,7 +469,7 @@ function initCart() {
 
   const box = document.getElementById('cartItems');
   box.innerHTML = items.map((i, idx) =>
-    '<div class="cart-item" style="animation-delay:' + (idx * 0.05) + 's">' +
+    '<div class="cart-item' + (animate === false ? ' re-render' : '') + '" style="animation-delay:' + (idx * 0.05) + 's">' +
       '<div class="ci-thumb">' + productImage(i.product, '') + '</div>' +
       '<div class="ci-main">' +
         '<div class="ci-name">' + esc(i.product.name[LANG]) + '</div>' +
@@ -358,7 +498,7 @@ function initCart() {
     if (btn.dataset.act === 'minus') Cart.setQty(id, size, found.qty - 1);
     if (btn.dataset.act === 'del') Cart.remove(id, size);
     updateBadge();
-    initCart();
+    initCart(false);
   });
 }
 
@@ -538,9 +678,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const page = document.body.dataset.page;
   if (page === 'home') initHome();
+  if (page === 'brand') initBrand();
   if (page === 'products') initProducts();
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'checkout') initCheckout();
   initParallax();
+  initCountUp();
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.quick-add');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = parseInt(btn.dataset.quick, 10);
+    if (!id) return;
+    Cart.add(id, 'M', 1);
+    updateBadge();
+    flyToCart(btn);
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('done');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('done'); }, 1200);
+  });
 });

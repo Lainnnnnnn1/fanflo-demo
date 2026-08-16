@@ -7,8 +7,8 @@
 <meta name="description" content="Merino wool sweaters, cardigans and scarves, straight from our own knitting mill.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body data-page="home">
 
@@ -70,6 +70,20 @@
     </div>
   </div>
 
+  <!-- 分类大导航 -->
+  <section class="section cat-nav-section">
+    <div class="container">
+      <div class="section-head fade-up">
+        <div>
+          <span class="label" data-i18n="catTitle">Shop by Category</span>
+          <h2 data-i18n="catNavTitle">Browse the collection.</h2>
+        </div>
+        <a class="hint" href="products.html" style="border-bottom:1px solid var(--carbon);padding-bottom:2px" data-i18n="navAll">Shop All →</a>
+      </div>
+      <div class="cat-nav" id="catNav"></div>
+    </div>
+  </section>
+
   <!-- 新品 -->
   <section class="section">
     <div class="container">
@@ -85,68 +99,8 @@
     </div>
   </section>
 
-  <!-- 生产流程 -->
-  <section class="section process">
-    <div class="container">
-      <div class="section-head fade-up">
-        <div>
-          <span class="label" data-i18n="procLabel">The Process</span>
-          <h2 data-i18n="procTitle">From design to doorstep.</h2>
-        </div>
-      </div>
-      <div class="proc-grid">
-        <div class="proc-step fade-up">
-          <div class="proc-img"><img src="assets/img/proc1.jpg" alt="Design" loading="lazy"></div>
-          <span class="proc-no">01</span>
-          <h3 data-i18n="proc1t">Design</h3>
-          <p data-i18n="proc1d">Patterns are drafted and graded in-house. Prototypes before production, always.</p>
-        </div>
-        <div class="proc-step fade-up d1">
-          <div class="proc-img"><img src="assets/img/proc2.jpg" alt="Sampling" loading="lazy"></div>
-          <span class="proc-no">02</span>
-          <h3 data-i18n="proc2t">Sampling</h3>
-          <p data-i18n="proc2d">Your colors, your labels, your packaging — sampled before anything runs.</p>
-        </div>
-        <div class="proc-step fade-up d2">
-          <div class="proc-img"><img src="assets/img/proc3.jpg" alt="Yarn" loading="lazy"></div>
-          <span class="proc-no">03</span>
-          <h3 data-i18n="proc3t">Yarn</h3>
-          <p data-i18n="proc3d">Merino and wool blends, sourced direct from the market. Bulk yarn, better price.</p>
-        </div>
-        <div class="proc-step fade-up d3">
-          <div class="proc-img"><img src="assets/img/proc4.jpg" alt="QC and Ship" loading="lazy"></div>
-          <span class="proc-no">04</span>
-          <h3 data-i18n="proc4t">QC &amp; Ship</h3>
-          <p data-i18n="proc4d">Every piece checked by hand before it ships. 2–3 business day turnaround.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- 分类 -->
-  <section class="section" style="padding-top:var(--space-5)">
-    <div class="container">
-      <div class="cats fade-up" id="cats"></div>
-    </div>
-  </section>
 
-  <!-- 故事 -->
-  <section class="section" id="story">
-    <div class="container story-grid">
-      <div class="fade-up">
-        <span class="label" data-i18n="storyLabel">Our Story</span>
-        <h2 data-i18n="storyTitle">A real knitting mill.</h2>
-        <p data-i18n="story1">We have been knitting for other brands since 2010 — sweaters for labels you would recognize. The machines are ours. The hands are ours. The wool comes straight from the Australian market.</p>
-        <p data-i18n="story2">Last year we stopped making clothes for other people's labels and started making them for ours. Same line, same hands — minus the markup.</p>
-        <div class="story-facts">
-          <div class="fact"><div class="num" data-i18n="f1n">16</div><span class="label" data-i18n="f1l">Years of Knitting</span></div>
-          <div class="fact"><div class="num" data-i18n="f2n">100%</div><span class="label" data-i18n="f2l">Merino Wool</span></div>
-          <div class="fact"><div class="num" data-i18n="f3n">300</div><span class="label" data-i18n="f3l">Pieces per Style</span></div>
-        </div>
-      </div>
-      <div class="story-photo fade-up d1"><img src="assets/img/story.jpg" alt="Wool yardage at the mill"></div>
-    </div>
-  </section>
 
   <!-- 订阅 -->
   <section class="newsletter">
@@ -172,12 +126,7 @@
       </div>
       <div>
         <h4 data-i18n="footShop">Shop</h4>
-        <ul>
-          <li><a href="products.html" data-i18n="navAll">Shop All</a></li>
-          <li><a href="products.html?cat=sweaters">Sweaters</a></li>
-          <li><a href="products.html?cat=cardigans">Cardigans</a></li>
-          <li><a href="products.html?cat=scarves">Scarves</a></li>
-        </ul>
+        <ul id="footerCats"></ul>
       </div>
       <div>
         <h4 data-i18n="footContact">Contact</h4>
@@ -187,7 +136,7 @@
         </ul>
       </div>
       <div>
-        <h4>Follow</h4>
+        <h4 data-i18n="footFollow">Follow</h4>
         <ul>
           <li><a href="#">Instagram</a></li>
           <li><a href="#">Pinterest</a></li>
@@ -202,8 +151,8 @@
   </div>
 </footer>
 
-<script src="js/data.js?v=6"></script>
-<script src="js/cart.js?v=6"></script>
-<script src="js/app.js?v=6"></script>
+<script src="js/data.js?v=8"></script>
+<script src="js/cart.js?v=8"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>
