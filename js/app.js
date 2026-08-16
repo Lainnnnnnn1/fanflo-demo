@@ -22,6 +22,8 @@ const I18N = {
     catTitle: 'Shop by Category',
     brandTitle: 'Eight lines, one mill.',
     catNavTitle: 'Browse the collection.',
+    newLabel: 'New Arrivals',
+    storyLabel: 'Our Story',
     freeShipMsg: 'Add ¥{n} more for free shipping',
     freeShipGot: 'Free shipping unlocked',
     sortNew: 'Newest', sortPriceAsc: 'Price ↑', sortPriceDesc: 'Price ↓',
@@ -74,6 +76,8 @@ const I18N = {
     catTitle: '按品类逛',
     brandTitle: '八个品类，一间织厂。',
     catNavTitle: '慢慢逛，挑一件。',
+    newLabel: '新品上架',
+    storyLabel: '我们的故事',
     freeShipMsg: '再买 ¥{n} 免运费',
     freeShipGot: '已免运费',
     sortNew: '最新', sortPriceAsc: '价格 ↑', sortPriceDesc: '价格 ↓',
@@ -121,6 +125,8 @@ const I18N = {
 
 /* ---------- 语言状态 ---------- */
 let LANG = 'en';
+let checkoutState = null;
+let detailState = { id: null, size: '', qty: 1 };
 try { LANG = localStorage.getItem('fanflo_lang') || 'en'; } catch (e) { /* noop */ }
 function t(key) { return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key] || key; }
 
@@ -161,14 +167,40 @@ function setLang(l) {
   LANG = l;
   try { localStorage.setItem('fanflo_lang', l); } catch (e) { /* noop */ }
   const savedY = window.scrollY || 0;
-  applyLang();
   const page = document.body.dataset.page;
+  if (page === 'checkout') saveCheckoutState();
+  if (page === 'product') saveDetailState();
+  applyLang();
   if (page === 'home') initHome();
   if (page === 'products') renderProducts();
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'checkout') initCheckout();
   requestAnimationFrame(() => window.scrollTo(0, savedY));
+}
+
+function saveCheckoutState() {
+  const form = document.getElementById('checkoutForm');
+  if (!form) { checkoutState = null; return; }
+  const s = {};
+  form.querySelectorAll('input').forEach(i => {
+    if (i.type === 'radio' || i.type === 'checkbox') {
+      if (i.checked) s[i.name] = i.value;
+    } else if (i.id) s[i.id] = i.value;
+  });
+  const pay = form.querySelector('input[name="pay"]:checked');
+  if (pay) s.pay = pay.value;
+  checkoutState = s;
+}
+
+function saveDetailState() {
+  const seg = document.getElementById('sizeSeg');
+  const num = document.getElementById('qtyNum');
+  if (seg && num) {
+    const active = seg.querySelector('button.active');
+    detailState.size = active ? active.dataset.size : '';
+    detailState.qty = parseInt(num.textContent, 10) || 1;
+  }
 }
 
 /* ---------- 通用 ---------- */
@@ -403,13 +435,21 @@ function initProduct() {
       '</div>' +
     '</div>';
 
-  let size = '';
-  let qty = 1;
+  let size = (detailState.id === p.id) ? detailState.size : '';
+  let qty = (detailState.id === p.id) ? detailState.qty : 1;
+  detailState.id = p.id;
 
   const sizeSeg = document.getElementById('sizeSeg');
   const sizeErr = document.getElementById('sizeErr');
   const qtyNum = document.getElementById('qtyNum');
   const addMsg = document.getElementById('addMsg');
+
+  if (size) {
+    sizeSeg.querySelectorAll('button').forEach(b => {
+      if (b.dataset.size === size) b.classList.add('active');
+    });
+  }
+  qtyNum.textContent = qty;
 
   sizeSeg.addEventListener('click', e => {
     const btn = e.target.closest('button');
@@ -433,6 +473,8 @@ function initProduct() {
   function bump(el) { el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 200); }
 
   document.getElementById('addBtn').addEventListener('click', () => {
+    detailState.size = size;
+    detailState.qty = qty;
     if (!size) { sizeErr.style.display = 'block'; return; }
     Cart.add(p.id, size, qty);
     updateBadge();
@@ -592,6 +634,19 @@ function initCheckout() {
   const form = document.getElementById('checkoutForm');
   const g = id => document.getElementById(id);
   const mark = (el, bad) => el.closest('.form-group').classList.toggle('invalid', bad);
+
+  if (checkoutState) {
+    Object.keys(checkoutState).forEach(k => {
+      const el = g(k);
+      if (el && el.type !== 'radio' && el.type !== 'checkbox') el.value = checkoutState[k] || '';
+    });
+    const pay = form.querySelector('input[name="pay"][value="' + (checkoutState.pay || 'card') + '"]');
+    if (pay) pay.checked = true;
+    const ship = form.querySelector('input[name="ship"][value="' + (checkoutState.ship || 'std') + '"]');
+    if (ship) ship.checked = true;
+    cardFields.style.display = (checkoutState.pay || 'card') === 'card' ? 'block' : 'none';
+    payOpts.querySelectorAll('.pay-opt').forEach(el => el.classList.toggle('active', el.querySelector('input').checked));
+  }
 
   function validate() {
     let ok = true;
