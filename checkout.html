@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>结账 — FanFlo 繁花毛织</title>
-<meta name="description" content="填写收货信息并提交订单。">
+<title>Checkout — FanFlo 繁花毛织</title>
+<meta name="description" content="Checkout at FanFlo.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="checkout">
@@ -16,16 +16,20 @@
       <span class="brand-cn">繁花毛织</span>
     </a>
     <nav class="main-nav">
-      <a href="products.html?cat=new">新品</a>
-      <a href="products.html">全部商品</a>
-      <a href="index.html#story">我们的工厂</a>
-      <a class="cart-link" href="cart.html">购物车<span class="cart-badge" id="cartBadge" data-count="0">0</span></a>
+      <a href="products.html?cat=new" data-i18n="navNew">New Arrivals</a>
+      <a href="products.html" data-i18n="navAll">Shop All</a>
+      <a href="index.html#story" data-i18n="navStory">Our Mill</a>
+      <a class="cart-link" href="cart.html"><span data-i18n="navCart">Cart</span><span class="cart-badge" id="cartBadge" data-count="0">0</span></a>
+      <span class="lang-switch" id="langSwitch">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="zh">中文</button>
+      </span>
     </nav>
   </div>
 </header>
 
 <main class="container checkout-page">
-  <h1>结账</h1>
+  <h1 data-i18n="coTitle">Checkout</h1>
   <div id="checkoutWrap"></div>
 </main>
 
@@ -33,29 +37,29 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="FanFlo 繁花毛织"><span class="brand-cn">繁花毛织</span></a>
-        <p style="margin-top:10px;font-size:14px;color:var(--ink-soft);max-width:36ch;">自有织厂直出的羊毛针织。原料、织造、发货，全程自己来。</p>
+        <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="FanFlo"><span class="brand-cn">繁花毛织</span></a>
+        <p style="margin-top:10px;font-size:14px;color:var(--ink-soft);max-width:36ch;" data-i18n="footerTag">Knitwear straight from our own mill — yarn, knitting, shipping, all ours.</p>
       </div>
       <div>
-        <h4>逛逛</h4>
+        <h4 data-i18n="footShop">Shop</h4>
         <ul>
-          <li><a href="products.html">全部商品</a></li>
-          <li><a href="products.html?cat=毛衣">毛衣</a></li>
-          <li><a href="products.html?cat=开衫">开衫</a></li>
-          <li><a href="products.html?cat=围巾">围巾</a></li>
+          <li><a href="products.html" data-i18n="navAll">Shop All</a></li>
+          <li><a href="products.html?cat=sweaters">Sweaters</a></li>
+          <li><a href="products.html?cat=cardigans">Cardigans</a></li>
+          <li><a href="products.html?cat=scarves">Scarves</a></li>
         </ul>
       </div>
       <div>
-        <h4>联系</h4>
+        <h4 data-i18n="footContact">Contact</h4>
         <ul>
-          <li><a href="mailto:hello@weave.example">hello@weave.example</a></li>
-          <li><a href="index.html#story">关于织厂</a></li>
+          <li><a href="mailto:hello@fanflo.example">hello@fanflo.example</a></li>
+          <li><a href="index.html#story" data-i18n="navStory">Our Mill</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 FanFlo 繁花毛织 · 样板站</span>
-      <span>面料是诚实的产品</span>
+      <span data-i18n="footCopy">© 2026 FanFlo 繁花毛织 · Demo</span>
+      <span data-i18n="footSlogan">Honest fabric, honest prices.</span>
     </div>
   </div>
 </footer>

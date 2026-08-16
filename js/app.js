@@ -1,24 +1,108 @@
-/* 织 WEAVE — 页面逻辑 */
+/* FanFlo 繁花毛织 — 页面逻辑 v2（双语 + 动效） */
 
-document.addEventListener('DOMContentLoaded', () => {
-  updateBadge();
-  const page = document.body.dataset.page;
-  if (page === 'home') initHome();
-  if (page === 'products') initProducts();
+/* ---------- i18n ---------- */
+const I18N = {
+  en: {
+    navNew: 'New Arrivals', navAll: 'Shop All', navStory: 'Our Mill', navCart: 'Cart',
+    heroSub: '2026 Fall / Winter · Merino Wool',
+    heroTitle: 'Knitted in our own factory.',
+    heroLead: 'No middlemen. No brand markup. Our sweaters come straight off our machines to your door — the price you see is what it costs to make it well.',
+    ctaNew: 'Shop New Arrivals', ctaAll: 'Browse All',
+    catTitle: 'Shop by Category',
+    newTitle: 'New This Week',
+    newHint: 'Just off the machines — 300 pieces per style, then it\'s gone.',
+    storyTitle: 'A Real Knitting Mill',
+    story1: 'We have been knitting for other brands since 2010 — sweaters for labels you would recognize. The machines are ours. The hands are ours. The wool comes straight from the Australian market.',
+    story2: 'Last year we stopped making clothes for other people\'s labels and started making them for ours. Same line, same hands — minus the markup.',
+    f1n: '16', f1l: 'Years of Knitting', f2n: '100%', f2l: 'Merino Wool', f3n: '300', f3l: 'Pieces per Style',
+    newsTitle: 'New Arrivals, First',
+    newsText: 'New styles go to our email list before they hit the site. One email a month, max.',
+    newsPh: 'Your email', newsBtn: 'Subscribe', newsOk: 'Got it. You\'ll hear from us first.',
+    footerTag: 'Knitwear straight from our own mill — yarn, knitting, shipping, all ours.',
+    footShop: 'Shop', footContact: 'Contact', footCopy: '© 2026 FanFlo 繁花毛织 · Demo', footSlogan: 'Honest fabric, honest prices.',
+    pTitle: 'All Products', pSub: 'Every piece comes off our machines, washed, checked and packed by the same hands.',
+    pAll: 'All', pCount: 'items', tagNew: 'NEW',
+    crumbHome: 'Home', size: 'Size', qty: 'Quantity', add: 'Add to Cart',
+    added: 'Added to cart — ', viewCart: 'View Cart →', pickSize: 'Pick a size first.',
+    nfTitle: 'This piece doesn\'t exist.', nfText: 'It may have sold out, or the link is wrong.', backAll: 'Back to All Products',
+    cTitle: 'Your Cart', cEmptyBig: 'Your cart is empty.', cEmptyText: 'Go find a sweater worth keeping.', cEmptyBtn: 'Start Shopping',
+    sub: 'Subtotal', ship: 'Shipping', free: 'Free', total: 'Total', checkout: 'Checkout', remove: 'Remove', metaSize: 'Size',
+    coTitle: 'Checkout', coEmptyBig: 'Nothing to check out.', coEmptyBtn: 'Grab Something First',
+    shipInfo: 'Shipping Details', fName: 'Full Name', fPhone: 'Phone', fAddr: 'Address', fCity: 'City', fZip: 'ZIP',
+    shipMethod: 'Delivery', shipStd: 'Standard — 3-5 days', shipFast: 'Express — 1-2 days',
+    payMethod: 'Payment', payCard: 'Credit Card', payPaypal: 'PayPal', payCod: 'Cash on Delivery',
+    cardNo: 'Card Number', exp: 'Expiry', cvc: 'CVC', placeOrder: 'Place Order · ',
+    sumTitle: 'Order Summary', okTitle: 'Order placed.', okText: 'Order number — this is a demo site. No money moves, nothing ships.', okBtn: 'Keep Browsing',
+    errReq: 'Please fill this in.', errPhone: 'Enter an 11-digit phone number.', errCard: 'Enter a 16-digit card number.', errExp: 'MM/YY', errCvc: '3-4 digits',
+    emptyCart: 'No items yet.'
+  },
+  zh: {
+    navNew: '新品', navAll: '全部商品', navStory: '我们的工厂', navCart: '购物车',
+    heroSub: '2026 秋冬 · 美利奴羊毛',
+    heroTitle: '羊毛针织，直接来自织厂',
+    heroLead: '没有中间商，没有品牌溢价。我们自己纺纱、自己织造、自己发货——把一件羊毛衫该有的价格，直接标给你。',
+    ctaNew: '看新品', ctaAll: '全部商品',
+    catTitle: '按品类逛',
+    newTitle: '本周新品',
+    newHint: '刚下织机的一批，每个款 300 件，卖完等下一批。',
+    storyTitle: '一家真的织厂',
+    story1: '我们从 2010 年开始做针织代工，给品牌供了十几年货。机器是自己的，工人是老师傅，原料从澳毛市场直接收。',
+    story2: '去年决定不再只给别人做嫁衣——用同样的产线，做自己的牌子。省掉品牌方的加价，把钱花在羊毛上。',
+    f1n: '16', f1l: '年织造经验', f2n: '100%', f2l: '美利奴羊毛', f3n: '300', f3l: '件/款限量',
+    newsTitle: '上新通知',
+    newsText: '每批新品上架前，先发邮件给订阅的人。不刷屏，一月最多两封。',
+    newsPh: '你的邮箱', newsBtn: '订阅', newsOk: '已记录，新品上架会第一个通知你。',
+    footerTag: '自有织厂直出的羊毛针织。原料、织造、发货，全程自己来。',
+    footShop: '逛逛', footContact: '联系', footCopy: '© 2026 FanFlo 繁花毛织 · 样板站', footSlogan: '面料是诚实的产品',
+    pTitle: '全部商品', pSub: '每一件都从我们的织机上下来，洗过、验过，才发货。',
+    pAll: '全部', pCount: '件商品', tagNew: '新品',
+    crumbHome: '首页', size: '尺码', qty: '数量', add: '加入购物车',
+    added: '已加入购物车 — ', viewCart: '去结算 →', pickSize: '先选一个尺码',
+    nfTitle: '这件商品不存在', nfText: '可能已经下架，或者链接有误。', backAll: '回全部商品',
+    cTitle: '购物车', cEmptyBig: '购物车还是空的', cEmptyText: '去挑一件吧，羊毛衫值得一件好的。', cEmptyBtn: '去逛逛',
+    sub: '小计', ship: '运费', free: '免运费', total: '合计', checkout: '去结算', remove: '删除', metaSize: '尺码',
+    coTitle: '结账', coEmptyBig: '没有要结账的商品', coEmptyBtn: '先去挑两件',
+    shipInfo: '收货信息', fName: '收货人', fPhone: '手机号', fAddr: '详细地址', fCity: '城市', fZip: '邮编',
+    shipMethod: '配送方式', shipStd: '标准配送 — 3-5 天', shipFast: '加急配送 — 1-2 天',
+    payMethod: '支付方式', payCard: '信用卡', payPaypal: 'PayPal', payCod: '货到付款',
+    cardNo: '卡号', exp: '有效期', cvc: 'CVC', placeOrder: '提交订单 · ',
+    sumTitle: '订单摘要', okTitle: '订单已提交', okText: '订单号 — 这是演示站，不会真的扣款，也不会真的发货。', okBtn: '继续逛逛',
+    errReq: '请填写此项', errPhone: '请填写 11 位手机号', errCard: '请填写 16 位卡号', errExp: '格式 MM/YY', errCvc: '3-4 位安全码',
+    emptyCart: '购物车还是空的'
+  }
+};
+
+/* ---------- 语言状态 ---------- */
+let LANG = 'en';
+try { LANG = localStorage.getItem('fanflo_lang') || 'en'; } catch (e) { /* noop */ }
+function t(key) { return (I18N[LANG] && I18N[LANG][key]) || I18N.en[key] || key; }
+
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+  const btns = document.querySelectorAll('.lang-switch button');
+  btns.forEach(b => b.classList.toggle('active', b.dataset.lang === LANG));
+  const html = document.documentElement;
+  html.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+}
+
+function setLang(l) {
+ LANG = l;
+ try { localStorage.setItem('fanflo_lang', l); } catch (e) { /* noop */ }
+ applyLang();
+ const page = document.body.dataset.page;
+ if (page === 'home') initHome();
+ if (page === 'products') renderProducts();
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'checkout') initCheckout();
-});
+}
 
 /* ---------- 通用 ---------- */
-
-function cardHTML(p) {
-  return '<article class="card"><a href="product.html?id=' + p.id + '">' +
-    '<div class="thumb">' + sweaterSVG(p.color, p.variant, p.name) + '</div>' +
-    '<div class="card-body"><h3>' + p.name + '</h3>' +
-    '<p class="mat">' + p.material + '</p>' +
-    '<p class="price">' + fmt(p.price) + '</p></div></a></article>';
-}
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({
@@ -26,27 +110,49 @@ function esc(s) {
   }[c]));
 }
 
-/* ---------- 首页 ---------- */
+function cardHTML(p) {
+  return '<article class="card fade-up"><a href="product.html?id=' + p.id + '">' +
+    '<div class="thumb">' + (p.isNew ? '<span class="tag">' + t('tagNew') + '</span>' : '') +
+    productImage(p, '') + '</div>' +
+    '<div class="card-body"><h3>' + esc(p.name[LANG]) + '</h3>' +
+    '<p class="mat">' + esc(p.material[LANG]) + '</p>' +
+    '<p class="price">' + fmt(p.price) + '</p></div></a></article>';
+}
 
+function catName(key) {
+  const c = CATS.find(c => c.key === key);
+  return c ? c[LANG] : key;
+}
+
+/* ---------- 滚动入场 ---------- */
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+}
+
+/* ---------- 首页 ---------- */
 function initHome() {
   const hero = document.getElementById('heroArt');
-  if (hero) hero.innerHTML = sweaterSVG('#B08D6A', 'turtle', 'hero');
+  if (hero) hero.innerHTML = '<div class="frame fade-up"><img src="assets/img/hero.jpg" alt="Fall knitwear" loading="eager"></div>' +
+    '<div class="stamp fade-up d2">FanFlo<br>' + (LANG === 'zh' ? '自家织厂' : 'Own Mill') + '</div>';
 
   const cats = document.getElementById('cats');
   if (cats) {
-    cats.innerHTML = CATS.map(c =>
-      '<a class="cat" href="products.html?cat=' + encodeURIComponent(c.name) + '">' +
-      sweaterSVG('#A35D3D', c.icon, c.name) + '<span>' + c.name + '</span></a>'
+    cats.innerHTML = CATS.map((c, i) =>
+      '<a class="cat fade-up d' + (i + 1) + '" href="products.html?cat=' + c.key + '">' +
+      sweaterSVG('#c96442', c.icon, c.en) + '<span>' + c[LANG] + '</span></a>'
     ).join('');
   }
 
   const grid = document.getElementById('newGrid');
-  if (grid) {
-    grid.innerHTML = PRODUCTS.filter(p => p.isNew).map(cardHTML).join('');
-  }
+  if (grid) grid.innerHTML = PRODUCTS.filter(p => p.isNew).map(cardHTML).join('');
 
   const story = document.getElementById('storyArt');
-  if (story) story.innerHTML = sweaterSVG('#6B6460', 'crew', 'story');
+  if (story) story.innerHTML = '<img src="assets/img/story.jpg" alt="Hands at the knitting machine" loading="lazy">';
 
   const form = document.getElementById('newsForm');
   if (form) {
@@ -55,52 +161,52 @@ function initHome() {
       const email = document.getElementById('newsEmail');
       if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
         const msg = document.getElementById('newsMsg');
-        if (msg) msg.style.display = 'block';
+        if (msg) { msg.style.display = 'block'; msg.textContent = t('newsOk'); }
         form.reset();
       }
     });
   }
+  initReveal();
 }
 
 /* ---------- 商品列表 ---------- */
-
-function initProducts() {
+function renderProducts() {
   const grid = document.getElementById('productGrid');
   if (!grid) return;
-
   const bar = document.getElementById('filterBar');
   const count = document.getElementById('resultCount');
   const params = new URLSearchParams(location.search);
-  let cat = params.get('cat') || '';
+  const cat = params.get('cat') || '';
 
-  const cats = ['全部'].concat(CATS.map(c => c.name));
-
-  function render() {
-    const list = cat && cat !== '全部' ? PRODUCTS.filter(p => p.cat === cat) : PRODUCTS;
-    grid.innerHTML = list.map(cardHTML).join('');
-    if (count) count.textContent = list.length + ' 件商品';
-    if (bar) {
-      bar.innerHTML = cats.map(c => {
-        const active = (cat === c) || (c === '全部' && !cat);
-        return '<button class="filter-btn' + (active ? ' active' : '') + '" data-cat="' + esc(c) + '">' + c + '</button>';
-      }).join('');
-    }
+  const list = cat ? PRODUCTS.filter(p => p.cat === cat) : PRODUCTS;
+  grid.innerHTML = list.map(cardHTML).join('');
+  if (count) count.textContent = list.length + ' ' + t('pCount');
+  if (bar) {
+    const opts = [{ key: '', label: t('pAll') }].concat(CATS.map(c => ({ key: c.key, label: c[LANG] })));
+    bar.innerHTML = opts.map(o =>
+      '<button class="filter-btn' + (o.key === cat ? ' active' : '') + '" data-cat="' + o.key + '">' + o.label + '</button>'
+    ).join('');
   }
+  initReveal();
+}
 
-  render();
-
+function initProducts() {
+  renderProducts();
+  const bar = document.getElementById('filterBar');
   if (bar) {
     bar.addEventListener('click', e => {
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
-      cat = btn.dataset.cat === '全部' ? '' : btn.dataset.cat;
-      render();
+      const url = new URL(location.href);
+      if (btn.dataset.cat) url.searchParams.set('cat', btn.dataset.cat);
+      else url.searchParams.delete('cat');
+      history.replaceState(null, '', url);
+      renderProducts();
     });
   }
 }
 
 /* ---------- 商品详情 ---------- */
-
 function initProduct() {
   const wrap = document.getElementById('detailWrap');
   if (!wrap) return;
@@ -109,35 +215,36 @@ function initProduct() {
   const p = PRODUCTS.find(x => x.id === id);
 
   if (!p) {
-    wrap.innerHTML = '<div class="notfound"><h1>这件商品不存在</h1><p>可能已经下架，或者链接有误。</p><p style="margin-top:16px"><a class="btn btn-primary" href="products.html">回全部商品</a></p></div>';
+    wrap.innerHTML = '<div class="notfound fade-up in"><h1>' + t('nfTitle') + '</h1><p>' + t('nfText') + '</p>' +
+      '<p style="margin-top:20px"><a class="btn btn-primary" href="products.html">' + t('backAll') + '</a></p></div>';
     return;
   }
 
-  document.title = p.name + ' — 织 WEAVE';
+  document.title = p.name.en + ' — FanFlo';
 
   wrap.innerHTML =
-    '<div class="breadcrumb"><a href="index.html">首页</a><span class="sep">/</span>' +
-    '<a href="products.html?cat=' + encodeURIComponent(p.cat) + '">' + esc(p.cat) + '</a>' +
-    '<span class="sep">/</span>' + esc(p.name) + '</div>' +
+    '<div class="breadcrumb fade-up in"><a href="index.html">' + t('crumbHome') + '</a><span class="sep">/</span>' +
+    '<a href="products.html?cat=' + p.cat + '">' + esc(catName(p.cat)) + '</a>' +
+    '<span class="sep">/</span>' + esc(p.name[LANG]) + '</div>' +
     '<div class="detail">' +
-      '<div class="detail-art">' + sweaterSVG(p.color, p.variant, p.name) + '</div>' +
-      '<div class="detail-info">' +
-        '<h1>' + esc(p.name) + '</h1>' +
-        '<p class="mat">' + esc(p.material) + '</p>' +
+      '<div class="detail-art fade-up"><img src="' + p.img + '" alt="' + esc(p.name.en) + '" loading="eager"></div>' +
+      '<div class="detail-info fade-up d1">' +
+        '<h1>' + esc(p.name[LANG]) + '</h1>' +
+        '<p class="mat">' + esc(p.material[LANG]) + '</p>' +
         '<p class="price">' + fmt(p.price) + '</p>' +
-        '<p class="desc">' + esc(p.desc) + '</p>' +
-        '<div class="field"><label>尺码</label><div class="seg" id="sizeSeg">' +
+        '<p class="desc">' + esc(p.desc[LANG]) + '</p>' +
+        '<div class="field"><label>' + t('size') + '</label><div class="seg" id="sizeSeg">' +
           ['S', 'M', 'L', 'XL'].map(s => '<button type="button" data-size="' + s + '">' + s + '</button>').join('') +
-        '</div><p class="err" id="sizeErr" style="display:none;color:var(--danger);font-size:12px;margin-top:6px">先选一个尺码</p></div>' +
-        '<div class="field"><label>数量</label><div class="qty">' +
-          '<button type="button" id="qtyMinus" aria-label="减少数量">−</button>' +
+        '</div><p class="err" id="sizeErr" style="display:none;color:var(--danger);font-size:12px;margin-top:6px">' + t('pickSize') + '</p></div>' +
+        '<div class="field"><label>' + t('qty') + '</label><div class="qty">' +
+          '<button type="button" id="qtyMinus" aria-label="minus">−</button>' +
           '<span id="qtyNum">1</span>' +
-          '<button type="button" id="qtyPlus" aria-label="增加数量">+</button>' +
+          '<button type="button" id="qtyPlus" aria-label="plus">+</button>' +
         '</div></div>' +
         '<div class="detail-actions">' +
-          '<button class="btn btn-primary" id="addBtn">加入购物车</button>' +
+          '<button class="btn btn-primary" id="addBtn">' + t('add') + '</button>' +
         '</div>' +
-        '<p class="add-msg" id="addMsg">已加入购物车 <a href="cart.html" style="text-decoration:underline">去结算 →</a></p>' +
+        '<p class="add-msg" id="addMsg">' + t('added') + '<a href="cart.html" style="text-decoration:underline">' + t('viewCart') + '</a></p>' +
       '</div>' +
     '</div>';
 
@@ -154,33 +261,32 @@ function initProduct() {
     if (!btn) return;
     sizeSeg.querySelectorAll('button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    size = btn.dataset.size;
     sizeErr.style.display = 'none';
   });
 
   document.getElementById('qtyMinus').addEventListener('click', () => {
     qty = Math.max(1, qty - 1);
     qtyNum.textContent = qty;
+    bump(qtyNum);
   });
   document.getElementById('qtyPlus').addEventListener('click', () => {
     qty = Math.min(99, qty + 1);
     qtyNum.textContent = qty;
+    bump(qtyNum);
   });
+  function bump(el) { el.classList.add('bump'); setTimeout(() => el.classList.remove('bump'), 200); }
 
   document.getElementById('addBtn').addEventListener('click', () => {
-    if (!size) {
-      sizeErr.style.display = 'block';
-      return;
-    }
+    if (!size) { sizeErr.style.display = 'block'; return; }
     Cart.add(p.id, size, qty);
     updateBadge();
     addMsg.style.display = 'block';
-    setTimeout(() => { addMsg.style.display = 'none'; }, 3000);
+    setTimeout(() => { addMsg.style.display = 'none'; }, 3200);
   });
+  initReveal();
 }
 
 /* ---------- 购物车 ---------- */
-
 function initCart() {
   const wrap = document.getElementById('cartWrap');
   if (!wrap) return;
@@ -188,9 +294,9 @@ function initCart() {
   const items = Cart.items();
 
   if (items.length === 0) {
-    wrap.innerHTML = '<div class="cart-empty"><p class="big">购物车还是空的</p>' +
-      '<p>去挑一件吧，羊毛衫值得一件好的。</p>' +
-      '<p style="margin-top:20px"><a class="btn btn-primary" href="products.html">去逛逛</a></p></div>';
+    wrap.innerHTML = '<div class="cart-empty fade-up in"><p class="big">' + t('cEmptyBig') + '</p>' +
+      '<p>' + t('cEmptyText') + '</p>' +
+      '<p style="margin-top:24px"><a class="btn btn-primary" href="products.html">' + t('cEmptyBtn') + '</a></p></div>';
     return;
   }
 
@@ -200,31 +306,31 @@ function initCart() {
   wrap.innerHTML =
     '<div class="cart-layout">' +
       '<div class="cart-items" id="cartItems"></div>' +
-      '<aside class="summary">' +
-        '<h3>订单摘要</h3>' +
-        '<div class="sum-row"><span>小计</span><span>' + fmt(subtotal) + '</span></div>' +
-        '<div class="sum-row"><span>运费</span><span>' + (ship === 0 ? '免运费' : fmt(ship)) + '</span></div>' +
-        '<div class="sum-row total"><span>合计</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
-        '<a class="btn btn-primary btn-block" href="checkout.html">去结算</a>' +
+      '<aside class="summary fade-up in">' +
+        '<h3>' + t('sumTitle') + '</h3>' +
+        '<div class="sum-row"><span>' + t('sub') + '</span><span>' + fmt(subtotal) + '</span></div>' +
+        '<div class="sum-row"><span>' + t('ship') + '</span><span>' + (ship === 0 ? t('free') : fmt(ship)) + '</span></div>' +
+        '<div class="sum-row total"><span>' + t('total') + '</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
+        '<a class="btn btn-primary btn-block" href="checkout.html">' + t('checkout') + '</a>' +
       '</aside>' +
     '</div>';
 
   const box = document.getElementById('cartItems');
-  box.innerHTML = items.map(i =>
-    '<div class="cart-item">' +
-      '<div class="ci-thumb">' + sweaterSVG(i.product.color, i.product.variant, i.product.name) + '</div>' +
+  box.innerHTML = items.map((i, idx) =>
+    '<div class="cart-item" style="animation-delay:' + (idx * 0.05) + 's">' +
+      '<div class="ci-thumb">' + productImage(i.product, '') + '</div>' +
       '<div>' +
-        '<div class="ci-name">' + esc(i.product.name) + '</div>' +
-        '<div class="ci-meta">尺码 ' + esc(i.size) + ' · ' + esc(i.product.material) + '</div>' +
+        '<div class="ci-name">' + esc(i.product.name[LANG]) + '</div>' +
+        '<div class="ci-meta">' + t('metaSize') + ' ' + esc(i.size) + ' · ' + esc(i.product.material[LANG]) + '</div>' +
         '<div class="qty" style="border:none;padding:0">' +
-          '<button type="button" data-act="minus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="减少">−</button>' +
+          '<button type="button" data-act="minus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="minus">−</button>' +
           '<span>' + i.qty + '</span>' +
-          '<button type="button" data-act="plus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="增加">+</button>' +
+          '<button type="button" data-act="plus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="plus">+</button>' +
         '</div>' +
       '</div>' +
       '<div class="ci-right">' +
         '<span class="ci-price">' + fmt(i.line) + '</span>' +
-        '<button class="ci-remove" data-act="del" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '">删除</button>' +
+        '<button class="ci-remove" data-act="del" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '">' + t('remove') + '</button>' +
       '</div>' +
     '</div>'
   ).join('');
@@ -234,16 +340,17 @@ function initCart() {
     if (!btn) return;
     const id = parseInt(btn.dataset.id, 10);
     const size = btn.dataset.size;
-    if (btn.dataset.act === 'plus') Cart.setQty(id, size, items.find(i => i.product.id === id && i.size === size).qty + 1);
-    if (btn.dataset.act === 'minus') Cart.setQty(id, size, items.find(i => i.product.id === id && i.size === size).qty - 1);
+    const found = items.find(i => i.product.id === id && i.size === size);
+    if (!found) return;
+    if (btn.dataset.act === 'plus') Cart.setQty(id, size, found.qty + 1);
+    if (btn.dataset.act === 'minus') Cart.setQty(id, size, found.qty - 1);
     if (btn.dataset.act === 'del') Cart.remove(id, size);
     updateBadge();
-    initCart(); // 重渲染
+    initCart();
   });
 }
 
 /* ---------- 结账 ---------- */
-
 function initCheckout() {
   const wrap = document.getElementById('checkoutWrap');
   if (!wrap) return;
@@ -251,8 +358,8 @@ function initCheckout() {
   const items = Cart.items();
 
   if (items.length === 0) {
-    wrap.innerHTML = '<div class="cart-empty"><p class="big">没有要结账的商品</p>' +
-      '<p><a class="btn btn-primary" style="margin-top:16px" href="products.html">先去挑两件</a></p></div>';
+    wrap.innerHTML = '<div class="cart-empty fade-up in"><p class="big">' + t('coEmptyBig') + '</p>' +
+      '<p><a class="btn btn-primary" style="margin-top:20px" href="products.html">' + t('coEmptyBtn') + '</a></p></div>';
     return;
   }
 
@@ -263,57 +370,56 @@ function initCheckout() {
     '<div class="checkout-layout">' +
       '<form id="checkoutForm" novalidate>' +
         '<div class="form-card">' +
-          '<h2>收货信息</h2>' +
+          '<h2>' + t('shipInfo') + '</h2>' +
           '<div class="form-row">' +
-            '<div class="form-group"><label for="fName">收货人</label><input id="fName" type="text" autocomplete="name"><p class="err">请填写收货人</p></div>' +
-            '<div class="form-group"><label for="fPhone">手机号</label><input id="fPhone" type="tel" autocomplete="tel"><p class="err">请填写 11 位手机号</p></div>' +
+            '<div class="form-group"><label for="fName">' + t('fName') + '</label><input id="fName" type="text" autocomplete="name"><p class="err">' + t('errReq') + '</p></div>' +
+            '<div class="form-group"><label for="fPhone">' + t('fPhone') + '</label><input id="fPhone" type="tel" autocomplete="tel"><p class="err">' + t('errPhone') + '</p></div>' +
           '</div>' +
-          '<div class="form-group"><label for="fAddr">详细地址</label><input id="fAddr" type="text" autocomplete="street-address"><p class="err">请填写详细地址</p></div>' +
+          '<div class="form-group"><label for="fAddr">' + t('fAddr') + '</label><input id="fAddr" type="text" autocomplete="street-address"><p class="err">' + t('errReq') + '</p></div>' +
           '<div class="form-row">' +
-            '<div class="form-group"><label for="fCity">城市</label><input id="fCity" type="text" autocomplete="address-level2"><p class="err">请填写城市</p></div>' +
-            '<div class="form-group"><label for="fZip">邮编</label><input id="fZip" type="text" autocomplete="postal-code"><p class="err">请填写邮编</p></div>' +
+            '<div class="form-group"><label for="fCity">' + t('fCity') + '</label><input id="fCity" type="text" autocomplete="address-level2"><p class="err">' + t('errReq') + '</p></div>' +
+            '<div class="form-group"><label for="fZip">' + t('fZip') + '</label><input id="fZip" type="text" autocomplete="postal-code"><p class="err">' + t('errReq') + '</p></div>' +
           '</div>' +
         '</div>' +
         '<div class="form-card">' +
-          '<h2>配送方式</h2>' +
+          '<h2>' + t('shipMethod') + '</h2>' +
           '<div class="pay-opts">' +
-            '<label class="pay-opt"><input type="radio" name="ship" value="std" checked><span><span class="po-name">标准配送</span><span class="po-note" style="display:block">3-5 天 · ' + (ship === 0 ? '免运费' : fmt(SHIP_FEE)) + '</span></span></label>' +
-            '<label class="pay-opt"><input type="radio" name="ship" value="fast"><span><span class="po-name">加急配送</span><span class="po-note" style="display:block">1-2 天 · +¥15</span></span></label>' +
+            '<label class="pay-opt"><input type="radio" name="ship" value="std" checked><span><span class="po-name">' + t('shipStd') + '</span></span></label>' +
+            '<label class="pay-opt"><input type="radio" name="ship" value="fast"><span><span class="po-name">' + t('shipFast') + '</span><span class="po-note" style="display:block">+¥15</span></span></label>' +
           '</div>' +
         '</div>' +
         '<div class="form-card">' +
-          '<h2>支付方式</h2>' +
+          '<h2>' + t('payMethod') + '</h2>' +
           '<div class="pay-opts" id="payOpts">' +
-            '<label class="pay-opt"><input type="radio" name="pay" value="card" checked><span><span class="po-name">信用卡</span><span class="po-note" style="display:block">Visa / Mastercard（演示）</span></span></label>' +
-            '<label class="pay-opt"><input type="radio" name="pay" value="paypal"><span><span class="po-name">PayPal</span><span class="po-note" style="display:block">跳转 PayPal 完成付款（演示）</span></span></label>' +
-            '<label class="pay-opt"><input type="radio" name="pay" value="cod"><span><span class="po-name">货到付款</span><span class="po-note" style="display:block">签收时现金付款</span></span></label>' +
+            '<label class="pay-opt"><input type="radio" name="pay" value="card" checked><span><span class="po-name">' + t('payCard') + '</span></span></label>' +
+            '<label class="pay-opt"><input type="radio" name="pay" value="paypal"><span><span class="po-name">' + t('payPaypal') + '</span></span></label>' +
+            '<label class="pay-opt"><input type="radio" name="pay" value="cod"><span><span class="po-name">' + t('payCod') + '</span></span></label>' +
           '</div>' +
           '<div id="cardFields" style="margin-top:16px">' +
-            '<div class="form-group"><label for="fCard">卡号</label><input id="fCard" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456"><p class="err">请填写 16 位卡号</p></div>' +
+            '<div class="form-group"><label for="fCard">' + t('cardNo') + '</label><input id="fCard" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456"><p class="err">' + t('errCard') + '</p></div>' +
             '<div class="form-row">' +
-              '<div class="form-group"><label for="fExp">有效期</label><input id="fExp" type="text" maxlength="5" placeholder="MM/YY"><p class="err">格式 MM/YY</p></div>' +
-              '<div class="form-group"><label for="fCvc">CVC</label><input id="fCvc" type="text" inputmode="numeric" maxlength="4"><p class="err">3-4 位安全码</p></div>' +
+              '<div class="form-group"><label for="fExp">' + t('exp') + '</label><input id="fExp" type="text" maxlength="5" placeholder="MM/YY"><p class="err">' + t('errExp') + '</p></div>' +
+              '<div class="form-group"><label for="fCvc">' + t('cvc') + '</label><input id="fCvc" type="text" inputmode="numeric" maxlength="4"><p class="err">' + t('errCvc') + '</p></div>' +
             '</div>' +
           '</div>' +
         '</div>' +
-        '<button class="btn btn-primary btn-block" type="submit" style="min-height:52px">提交订单 · ' + fmt(subtotal + ship) + '</button>' +
+        '<button class="btn btn-primary btn-block" type="submit" style="min-height:54px">' + t('placeOrder') + fmt(subtotal + ship) + '</button>' +
       '</form>' +
-      '<aside class="summary">' +
-        '<h3>订单摘要</h3>' +
-        items.map(i => '<div class="sum-row"><span>' + esc(i.product.name) + ' ×' + i.qty + '</span><span>' + fmt(i.line) + '</span></div>').join('') +
-        '<div class="sum-row"><span>小计</span><span>' + fmt(subtotal) + '</span></div>' +
-        '<div class="sum-row"><span>运费</span><span>' + (ship === 0 ? '免运费' : fmt(ship)) + '</span></div>' +
-        '<div class="sum-row total"><span>合计</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
+      '<aside class="summary fade-up in">' +
+        '<h3>' + t('sumTitle') + '</h3>' +
+        items.map(i => '<div class="sum-row"><span>' + esc(i.product.name[LANG]) + ' ×' + i.qty + '</span><span>' + fmt(i.line) + '</span></div>').join('') +
+        '<div class="sum-row"><span>' + t('sub') + '</span><span>' + fmt(subtotal) + '</span></div>' +
+        '<div class="sum-row"><span>' + t('ship') + '</span><span>' + (ship === 0 ? t('free') : fmt(ship)) + '</span></div>' +
+        '<div class="sum-row total"><span>' + t('total') + '</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
       '</aside>' +
     '</div>' +
     '<div class="success-box" id="successBox" style="display:none">' +
       '<div class="tick">✓</div>' +
-      '<h1>订单已提交</h1>' +
-      '<p>订单号 <span class="order-no" id="orderNo"></span><br>这是演示站，不会真的扣款，也不会真的发货。</p>' +
-      '<a class="btn btn-primary" href="products.html">继续逛逛</a>' +
+      '<h1>' + t('okTitle') + '</h1>' +
+      '<p>' + t('okText') + ' <span class="order-no" id="orderNo"></span></p>' +
+      '<a class="btn btn-primary" href="products.html">' + t('okBtn') + '</a>' +
     '</div>';
 
-  /* 支付方式切换 */
   const payOpts = document.getElementById('payOpts');
   const cardFields = document.getElementById('cardFields');
   payOpts.addEventListener('change', e => {
@@ -323,7 +429,6 @@ function initCheckout() {
   });
   payOpts.querySelectorAll('.pay-opt').forEach(el => el.classList.add('active'));
 
-  /* 校验 */
   const form = document.getElementById('checkoutForm');
   const g = id => document.getElementById(id);
   const mark = (el, bad) => el.closest('.form-group').classList.toggle('invalid', bad);
@@ -359,7 +464,6 @@ function initCheckout() {
     return ok;
   }
 
-  /* 卡号自动格式化 */
   g('fCard').addEventListener('input', e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
   });
@@ -375,4 +479,33 @@ function initCheckout() {
     updateBadge();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+  initReveal();
 }
+
+/* ---------- 启动 ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  updateBadge();
+  applyLang();
+
+  const sw = document.getElementById('langSwitch');
+  if (sw) {
+    sw.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-lang]');
+      if (btn && btn.dataset.lang !== LANG) setLang(btn.dataset.lang);
+    });
+  }
+
+  const header = document.querySelector('.site-header');
+  if (header) {
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  const page = document.body.dataset.page;
+  if (page === 'home') initHome();
+  if (page === 'products') initProducts();
+  if (page === 'product') initProduct();
+  if (page === 'cart') initCart();
+  if (page === 'checkout') initCheckout();
+});

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FanFlo 繁花毛织 — 羊毛针织，直接来自织厂</title>
-<meta name="description" content="自有工厂出品的美利奴羊毛针织。毛衣、开衫、围巾，直接来自织厂。">
+<title>FanFlo 繁花毛织 — Knitted in our own factory</title>
+<meta name="description" content="Merino wool sweaters, cardigans and scarves, straight from our own knitting mill.">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="home">
@@ -16,10 +16,14 @@
       <span class="brand-cn">繁花毛织</span>
     </a>
     <nav class="main-nav">
-      <a href="products.html?cat=new">新品</a>
-      <a href="products.html">全部商品</a>
-      <a href="index.html#story">我们的工厂</a>
-      <a class="cart-link" href="cart.html">购物车<span class="cart-badge" id="cartBadge" data-count="0">0</span></a>
+      <a href="products.html?cat=new" data-i18n="navNew">New Arrivals</a>
+      <a href="products.html" data-i18n="navAll">Shop All</a>
+      <a href="index.html#story" data-i18n="navStory">Our Mill</a>
+      <a class="cart-link" href="cart.html"><span data-i18n="navCart">Cart</span><span class="cart-badge" id="cartBadge" data-count="0">0</span></a>
+      <span class="lang-switch" id="langSwitch">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="zh">中文</button>
+      </span>
     </nav>
   </div>
 </header>
@@ -28,12 +32,12 @@
   <section class="hero">
     <div class="container hero-inner">
       <div>
-        <p class="hero-sub">2026 秋冬 · 美利奴羊毛</p>
-        <h1>羊毛针织，直接来自织厂</h1>
-        <p>没有中间商，没有品牌溢价。我们自己纺纱、自己织造、自己发货——把一件羊毛衫该有的价格，直接标给你。</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="products.html?cat=new">看新品</a>
-          <a class="btn btn-ghost" href="products.html">全部商品</a>
+        <p class="hero-sub fade-up in" data-i18n="heroSub">2026 Fall / Winter · Merino Wool</p>
+        <h1 class="fade-up in d1" data-i18n="heroTitle">Knitted in our own factory.</h1>
+        <p class="lead fade-up in d2" data-i18n="heroLead">No middlemen. No brand markup. Our sweaters come straight off our machines to your door — the price you see is what it costs to make it well.</p>
+        <div class="hero-actions fade-up in d3">
+          <a class="btn btn-primary" href="products.html?cat=new" data-i18n="ctaNew">Shop New Arrivals</a>
+          <a class="btn btn-ghost" href="products.html" data-i18n="ctaAll">Browse All</a>
         </div>
       </div>
       <div class="hero-art" id="heroArt"></div>
@@ -42,8 +46,8 @@
 
   <section class="section">
     <div class="container">
-      <div class="section-head">
-        <h2>按品类逛</h2>
+      <div class="section-head fade-up">
+        <h2 data-i18n="catTitle">Shop by Category</h2>
       </div>
       <div class="cats" id="cats"></div>
     </div>
@@ -51,39 +55,45 @@
 
   <section class="section">
     <div class="container">
-      <div class="section-head">
-        <h2>本周新品</h2>
-        <p class="hint">刚下织机的一批，每个款 300 件，卖完等下一批。</p>
+      <div class="section-head fade-up">
+        <h2 data-i18n="newTitle">New This Week</h2>
+        <p class="hint" data-i18n="newHint">Just off the machines — 300 pieces per style, then it's gone.</p>
       </div>
       <div class="grid" id="newGrid"></div>
     </div>
   </section>
 
   <section class="section" id="story">
-    <div class="container story">
-      <div>
-        <h2>一家真的织厂</h2>
-        <p>我们从 2010 年开始做针织代工，给品牌供了十几年货。机器是自己的，工人是老师傅，原料从澳毛市场直接收。</p>
-        <p>去年决定不再只给别人做嫁衣——用同样的产线，做自己的牌子。省掉品牌方的加价，把钱花在羊毛上。</p>
-        <div class="story-facts">
-          <div class="fact"><div class="num">16</div><div class="label">年织造经验</div></div>
-          <div class="fact"><div class="num">100%</div><div class="label">美利奴羊毛</div></div>
-          <div class="fact"><div class="num">300</div><div class="label">件/款限量</div></div>
+    <div class="container">
+      <div class="story fade-up">
+        <div class="story-inner">
+          <div>
+            <h2 data-i18n="storyTitle">A Real Knitting Mill</h2>
+            <p data-i18n="story1">We have been knitting for other brands since 2010 — sweaters for labels you would recognize. The machines are ours. The hands are ours. The wool comes straight from the Australian market.</p>
+            <p data-i18n="story2">Last year we stopped making clothes for other people's labels and started making them for ours. Same line, same hands — minus the markup.</p>
+            <div class="story-facts">
+              <div class="fact"><div class="num" data-i18n="f1n">16</div><div class="label" data-i18n="f1l">Years of Knitting</div></div>
+              <div class="fact"><div class="num" data-i18n="f2n">100%</div><div class="label" data-i18n="f2l">Merino Wool</div></div>
+              <div class="fact"><div class="num" data-i18n="f3n">300</div><div class="label" data-i18n="f3l">Pieces per Style</div></div>
+            </div>
+          </div>
+          <div class="story-art" id="storyArt"></div>
         </div>
       </div>
-      <div id="storyArt"></div>
     </div>
   </section>
 
   <section class="newsletter">
     <div class="container">
-      <h2>上新通知</h2>
-      <p>每批新品上架前，先发邮件给订阅的人。不刷屏，一月最多两封。</p>
-      <form class="news-form" id="newsForm">
-        <input type="email" id="newsEmail" placeholder="你的邮箱" aria-label="邮箱" required>
-        <button class="btn btn-primary" type="submit">订阅</button>
-      </form>
-      <p class="news-msg" id="newsMsg">已记录，新品上架会第一个通知你。</p>
+      <div class="newsletter-box fade-up">
+        <h2 data-i18n="newsTitle">New Arrivals, First</h2>
+        <p data-i18n="newsText">New styles go to our email list before they hit the site. One email a month, max.</p>
+        <form class="news-form" id="newsForm">
+          <input type="email" id="newsEmail" data-i18n-ph="newsPh" placeholder="Your email" aria-label="Email" required>
+          <button class="btn btn-primary" type="submit" data-i18n="newsBtn">Subscribe</button>
+        </form>
+        <p class="news-msg" id="newsMsg"></p>
+      </div>
     </div>
   </section>
 </main>
@@ -92,34 +102,35 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="FanFlo 繁花毛织"><span class="brand-cn">繁花毛织</span></a>
-        <p style="margin-top:10px;font-size:14px;color:var(--ink-soft);max-width:36ch;">自有织厂直出的羊毛针织。原料、织造、发货，全程自己来。</p>
+        <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="FanFlo"><span class="brand-cn">繁花毛织</span></a>
+        <p style="margin-top:10px;font-size:14px;color:var(--ink-soft);max-width:36ch;" data-i18n="footerTag">Knitwear straight from our own mill — yarn, knitting, shipping, all ours.</p>
       </div>
       <div>
-        <h4>逛逛</h4>
+        <h4 data-i18n="footShop">Shop</h4>
         <ul>
-          <li><a href="products.html">全部商品</a></li>
-          <li><a href="products.html?cat=毛衣">毛衣</a></li>
-          <li><a href="products.html?cat=开衫">开衫</a></li>
-          <li><a href="products.html?cat=围巾">围巾</a></li>
+          <li><a href="products.html" data-i18n="navAll">Shop All</a></li>
+          <li><a href="products.html?cat=sweaters">Sweaters</a></li>
+          <li><a href="products.html?cat=cardigans">Cardigans</a></li>
+          <li><a href="products.html?cat=scarves">Scarves</a></li>
         </ul>
       </div>
       <div>
-        <h4>联系</h4>
+        <h4 data-i18n="footContact">Contact</h4>
         <ul>
-          <li><a href="mailto:hello@weave.example">hello@weave.example</a></li>
-          <li><a href="index.html#story">关于织厂</a></li>
+          <li><a href="mailto:hello@fanflo.example">hello@fanflo.example</a></li>
+          <li><a href="index.html#story" data-i18n="navStory">Our Mill</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 FanFlo 繁花毛织 · 样板站</span>
-      <span>面料是诚实的产品</span>
+      <span data-i18n="footCopy">© 2026 FanFlo 繁花毛织 · Demo</span>
+      <span data-i18n="footSlogan">Honest fabric, honest prices.</span>
     </div>
   </div>
 </footer>
 
 <script src="js/data.js"></script>
+<script src="js/cart.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
