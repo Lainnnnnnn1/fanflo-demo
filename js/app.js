@@ -145,11 +145,15 @@ function applyLang() {
 }
 
 function renderFooterCats() {
+  const isBrand = document.body.dataset.page === 'brand';
   document.querySelectorAll('#footerCats').forEach(ul => {
     ul.innerHTML = CATS.map(c =>
-      '<li><a href="products.html?cat=' + c.key + '">' + c[LANG] + '</a></li>'
+      '<li>' + (isBrand
+        ? '<span style="cursor:default">' + c[LANG] + '</span>'
+        : '<a href="products.html?cat=' + c.key + '">' + c[LANG] + '</a>') +
+      '</li>'
     ).join('') +
-    '<li><a href="products.html">' + t('navAll') + '</a></li>';
+    (isBrand ? '' : '<li><a href="products.html">' + t('navAll') + '</a></li>');
   });
 }
 
@@ -256,9 +260,9 @@ function initBrand() {
   if (grid) {
     grid.innerHTML = CATS.map((c, i) => {
       const p = PRODUCTS.find(x => x.cat === c.key);
-      return '<a class="card fade-up d' + ((i % 4) + 1) + '" href="products.html?cat=' + c.key + '">' +
+      return '<div class="card fade-up d' + ((i % 4) + 1) + '" role="link" tabindex="0">' +
         '<div class="thumb"><img class="img-a" src="' + (p ? p.img : 'assets/img/hero.jpg') + '" alt="' + c.en + '" loading="lazy"></div>' +
-        '<div class="card-body"><h3>' + c[LANG] + '</h3><p class="mat">' + t('pAll') + '</p></div></a>';
+        '<div class="card-body"><h3>' + c[LANG] + '</h3><p class="mat">' + c.en + '</p></div></div>';
     }).join('');
   }
   initReveal();
