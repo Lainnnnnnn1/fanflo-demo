@@ -407,6 +407,7 @@ function initProduct() {
   sizeSeg.addEventListener('click', e => {
     const btn = e.target.closest('button');
     if (!btn) return;
+    size = btn.dataset.size;
     sizeSeg.querySelectorAll('button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     sizeErr.style.display = 'none';
