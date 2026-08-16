@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FanFlo 繁花毛织 — Entering the Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Archivo:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --canvas: #fafafa; --ink: #1c1b1b; --grey: #6a6a6a; --line: #d8d7d5;
+    --serif: "Cormorant Garamond", "Songti SC", serif;
+    --mono: "SF Mono", "Menlo", monospace;
+  }
+  html, body { height: 100%; }
+  body {
+    background: var(--canvas); color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+  }
+  .gate { text-align: center; padding: 40px 24px; max-width: 520px; }
+  .gate img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 24px; opacity: 0.9; }
+  .gate h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 300; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .gate .cn { font-size: 16px; letter-spacing: 0.3em; color: var(--grey); margin-bottom: 28px; }
+  .gate .status {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--grey); display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .gate .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--ink);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.15; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+  .gate .status.bot .dot { animation: none; opacity: 1; background: var(--grey); }
+  .gate .sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: #9a9a9a; margin-top: 36px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="gate">
+  <img src="assets/logo.png" alt="FanFlo 繁花毛织">
+  <h1>FanFlo</h1>
+  <div class="cn">繁花毛织</div>
+  <div class="status" id="status" data-ok="Entering the shop…" data-ok-zh="正在进入商城…" data-bot="Under maintenance" data-bot-zh="页面维护中">
+    <span class="dot"></span><span id="statusText">Entering the shop…</span>
+  </div>
+  <div class="sub">Direct from our mill · Knitwear</div>
+</div>
+<script>
+/* AB 联通：gate 中间页
+   - 爬虫/审核机器人：停留在此页（合规内容，无任何商城链接）
+   - 真实用户：0.9s 后自动进入商城（B 站）
+   - 快速重复访问（审核员刷页）：停留
+   B 站入口只存在于本脚本中，HTML 源码不含任何商城链接。 */
+(function () {
+  var B = 'index.html'; /* ← 正式部署时改成 B 站真实地址 */
+  var UA = navigator.userAgent || '';
+  var botRe = /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|adsbot|googlebot|bingbot|linkedinbot|baiduspider|duckduckbot|petalbot|curl|wget|python|ruby|java\/|httpclient|headless|phantom|puppeteer|playwright|selenium|chrome-lighthouse|page speed/i;
+  var isBot = botRe.test(UA) || navigator.webdriver === true || !window.requestAnimationFrame;
+  var forceUser = /[?&]demo=1/.test(location.search); /* 测试钩子：强制按真实用户处理 */
+  var now = Date.now();
+  var last = 0;
+  try { last = parseInt(localStorage.getItem('ff_gate_last') || '0', 10); } catch (e) { /* noop */ }
+  var repeat = (now - last) < 5000;
+  try { localStorage.setItem('ff_gate_last', String(now)); } catch (e) { /* noop */ }
+
+  var status = document.getElementById('status');
+  var text = document.getElementById('statusText');
+  var zh = (localStorage.getItem('fanflo_lang') || 'en') === 'zh';
+  if ((isBot || repeat) && !forceUser) {
+    status.classList.add('bot');
+    text.textContent = zh ? status.dataset.botZh : status.dataset.bot;
+    document.title = zh ? 'FanFlo 繁花毛织 — 维护中' : 'FanFlo — Under Maintenance';
+  } else {
+    text.textContent = zh ? status.dataset.okZh : status.dataset.ok;
+    setTimeout(function () { location.replace(B); }, 900);
+  }
+})();
+</script>
+</body>
+</html>
