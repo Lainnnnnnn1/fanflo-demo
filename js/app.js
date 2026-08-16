@@ -295,9 +295,10 @@ function initBrand() {
   if (grid) {
     grid.innerHTML = CATS.map((c, i) => {
       const p = PRODUCTS.find(x => x.cat === c.key);
-      return '<div class="card no-swap fade-up d' + ((i % 4) + 1) + '" role="link" tabindex="0">' +
-        '<div class="thumb"><img class="img-a" src="' + (p ? p.img : 'assets/img/hero.jpg') + '" alt="' + c.en + '" loading="lazy"></div>' +
-        '<div class="card-body"><h3>' + c[LANG] + '</h3><p class="mat">' + c.en + '</p></div></div>';
+      return '<div class="line-card fade-up d' + ((i % 2) + 1) + '">' +
+        '<div class="line-img"><img src="' + (p ? p.img : 'assets/img/hero.jpg') + '" alt="' + c.en + '" loading="lazy"></div>' +
+        '<div class="line-meta"><span class="label">0' + (i + 1) + ' / 04</span>' +
+        '<h3>' + c[LANG] + '</h3><p>' + c.en + '</p></div></div>';
     }).join('');
   }
   initReveal();
