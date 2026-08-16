@@ -180,13 +180,16 @@ function esc(s) {
 }
 
 function cardHTML(p) {
-  return '<article class="card fade-up"><a href="product.html?id=' + p.id + '">' +
-    '<div class="thumb">' + (p.isNew ? '<span class="tag">' + t('tagNew') + '</span>' : '') +
+  return '<article class="card fade-up">' +
+    '<div class="thumb">' +
+    '<a href="product.html?id=' + p.id + '" class="thumb-link">' +
+    (p.isNew ? '<span class="tag">' + t('tagNew') + '</span>' : '') +
     '<img class="img-a" src="' + p.img + '" alt="' + esc(p.name.en) + '" loading="lazy">' +
     (p.img2 ? '<img class="img-b" src="' + p.img2 + '" alt="" loading="lazy">' : '') +
+    '</a>' +
     '<button type="button" class="quick-add" data-quick="' + p.id + '">' + t('qaBtn') + '</button>' +
     '</div>' +
-    '<div class="card-body"><h3>' + esc(p.name[LANG]) + '</h3>' +
+    '<a href="product.html?id=' + p.id + '"><div class="card-body"><h3>' + esc(p.name[LANG]) + '</h3>' +
     '<p class="mat">' + esc(p.material[LANG]) + '</p>' +
     '<p class="price">' + fmt(p.price) + '</p></div></a></article>';
 }
