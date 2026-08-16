@@ -16,6 +16,7 @@ const I18N = {
     story2: 'Last year we stopped making clothes for other people\'s labels and started making them for ours. Same line, same hands — minus the markup.',
     f1n: '16', f1l: 'Years of Knitting', f2n: '100%', f2l: 'Merino Wool', f3n: '300', f3l: 'Pieces per Style',
     newsTitle: 'New Arrivals, First',
+    newsTitle2: 'First come, first worn.',
     newsText: 'New styles go to our email list before they hit the site. One email a month, max.',
     newsPh: 'Your email', newsBtn: 'Subscribe', newsOk: 'Got it. You\'ll hear from us first.',
     footerTag: 'Knitwear straight from our own mill — yarn, knitting, shipping, all ours.',
@@ -50,6 +51,7 @@ const I18N = {
     story2: '去年决定不再只给别人做嫁衣——用同样的产线，做自己的牌子。省掉品牌方的加价，把钱花在羊毛上。',
     f1n: '16', f1l: '年织造经验', f2n: '100%', f2l: '美利奴羊毛', f3n: '300', f3l: '件/款限量',
     newsTitle: '上新通知',
+    newsTitle2: '先到先穿。',
     newsText: '每批新品上架前，先发邮件给订阅的人。不刷屏，一月最多两封。',
     newsPh: '你的邮箱', newsBtn: '订阅', newsOk: '已记录，新品上架会第一个通知你。',
     footerTag: '自有织厂直出的羊毛针织。原料、织造、发货，全程自己来。',
@@ -91,15 +93,17 @@ function applyLang() {
 }
 
 function setLang(l) {
- LANG = l;
- try { localStorage.setItem('fanflo_lang', l); } catch (e) { /* noop */ }
- applyLang();
- const page = document.body.dataset.page;
- if (page === 'home') initHome();
- if (page === 'products') renderProducts();
+  LANG = l;
+  try { localStorage.setItem('fanflo_lang', l); } catch (e) { /* noop */ }
+  const savedY = window.scrollY || 0;
+  applyLang();
+  const page = document.body.dataset.page;
+  if (page === 'home') initHome();
+  if (page === 'products') renderProducts();
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'checkout') initCheckout();
+  requestAnimationFrame(() => window.scrollTo(0, savedY));
 }
 
 /* ---------- 通用 ---------- */
@@ -113,7 +117,9 @@ function esc(s) {
 function cardHTML(p) {
   return '<article class="card fade-up"><a href="product.html?id=' + p.id + '">' +
     '<div class="thumb">' + (p.isNew ? '<span class="tag">' + t('tagNew') + '</span>' : '') +
-    productImage(p, '') + '</div>' +
+    '<img class="img-a" src="' + p.img + '" alt="' + esc(p.name.en) + '" loading="lazy">' +
+    (p.img2 ? '<img class="img-b" src="' + p.img2 + '" alt="" loading="lazy">' : '') +
+    '</div>' +
     '<div class="card-body"><h3>' + esc(p.name[LANG]) + '</h3>' +
     '<p class="mat">' + esc(p.material[LANG]) + '</p>' +
     '<p class="price">' + fmt(p.price) + '</p></div></a></article>';
@@ -136,23 +142,16 @@ function initReveal() {
 
 /* ---------- 首页 ---------- */
 function initHome() {
-  const hero = document.getElementById('heroArt');
-  if (hero) hero.innerHTML = '<div class="frame fade-up"><img src="assets/img/hero.jpg" alt="Fall knitwear" loading="eager"></div>' +
-    '<div class="stamp fade-up d2">FanFlo<br>' + (LANG === 'zh' ? '自家织厂' : 'Own Mill') + '</div>';
-
   const cats = document.getElementById('cats');
   if (cats) {
     cats.innerHTML = CATS.map((c, i) =>
       '<a class="cat fade-up d' + (i + 1) + '" href="products.html?cat=' + c.key + '">' +
-      sweaterSVG('#c96442', c.icon, c.en) + '<span>' + c[LANG] + '</span></a>'
+      '<span class="idx">0' + (i + 1) + '</span><span>' + c[LANG] + '</span></a>'
     ).join('');
   }
 
   const grid = document.getElementById('newGrid');
   if (grid) grid.innerHTML = PRODUCTS.filter(p => p.isNew).map(cardHTML).join('');
-
-  const story = document.getElementById('storyArt');
-  if (story) story.innerHTML = '<img src="assets/img/story.jpg" alt="Hands at the knitting machine" loading="lazy">';
 
   const form = document.getElementById('newsForm');
   if (form) {
@@ -482,6 +481,28 @@ function initCheckout() {
   initReveal();
 }
 
+/* ---------- 视差 ---------- */
+function initParallax() {
+  const els = document.querySelectorAll('.parallax');
+  if (!els.length) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      els.forEach(el => {
+        const speed = parseFloat(el.dataset.speed || '0.2');
+        el.style.transform = 'translate3d(0, ' + (y * speed) + 'px, 0)';
+      });
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
 /* ---------- 启动 ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   updateBadge();
@@ -508,4 +529,5 @@ document.addEventListener('DOMContentLoaded', () => {
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'checkout') initCheckout();
+  initParallax();
 });

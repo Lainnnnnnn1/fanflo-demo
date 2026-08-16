@@ -29,71 +29,89 @@
 </header>
 
 <main>
+  <!-- Hero：全视口全幅摄影 -->
   <section class="hero">
-    <div class="container hero-inner">
-      <div>
-        <p class="hero-sub fade-up in" data-i18n="heroSub">2026 Fall / Winter · Merino Wool</p>
-        <h1 class="fade-up in d1" data-i18n="heroTitle">Knitted in our own factory.</h1>
-        <p class="lead fade-up in d2" data-i18n="heroLead">No middlemen. No brand markup. Our sweaters come straight off our machines to your door — the price you see is what it costs to make it well.</p>
-        <div class="hero-actions fade-up in d3">
-          <a class="btn btn-primary" href="products.html?cat=new" data-i18n="ctaNew">Shop New Arrivals</a>
-          <a class="btn btn-ghost" href="products.html" data-i18n="ctaAll">Browse All</a>
+    <div class="hero-photo parallax" data-speed="0.25"><img src="assets/img/hero.jpg" alt="Fall knitwear"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="label fade-up in" data-i18n="heroSub">Fall / Winter 2026 · Merino Wool</span>
+      <h1 class="fade-up in d1" data-i18n="heroTitle">Knitted in our own factory.</h1>
+      <p class="sub fade-up in d2" data-i18n="heroLead">No middlemen. No brand markup. Our sweaters come straight off our machines to your door — the price you see is what it costs to make it well.</p>
+      <div class="hero-actions fade-up in d3">
+        <a class="btn btn-on-photo" href="products.html?cat=new" data-i18n="ctaNew">Shop New Arrivals</a>
+        <a class="btn btn-on-photo" href="products.html" data-i18n="ctaAll">Browse All</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 跑马灯 -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Merino Wool</span><span class="dot">—</span><span>Direct from our mill</span><span class="dot">—</span><span>羊毛针织 自家织厂</span><span class="dot">—</span><span>No middlemen</span><span class="dot">—</span><span>Est. 2010</span><span class="dot">—</span><span>Merino Wool</span><span class="dot">—</span><span>Direct from our mill</span><span class="dot">—</span><span>羊毛针织 自家织厂</span><span class="dot">—</span><span>No middlemen</span><span class="dot">—</span><span>Est. 2010</span><span class="dot">—</span>
+    </div>
+  </div>
+
+  <!-- 新品 -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head fade-up">
+        <div>
+          <span class="label" data-i18n="newLabel">New Arrivals</span>
+          <h2 data-i18n="newTitle">New This Week</h2>
         </div>
-      </div>
-      <div class="hero-art" id="heroArt"></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="section-head fade-up">
-        <h2 data-i18n="catTitle">Shop by Category</h2>
-      </div>
-      <div class="cats" id="cats"></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="section-head fade-up">
-        <h2 data-i18n="newTitle">New This Week</h2>
-        <p class="hint" data-i18n="newHint">Just off the machines — 300 pieces per style, then it's gone.</p>
+        <span class="hint" data-i18n="newHint">Just off the machines — 300 pieces per style, then it's gone.</span>
       </div>
       <div class="grid" id="newGrid"></div>
     </div>
   </section>
 
-  <section class="section" id="story">
-    <div class="container">
-      <div class="story fade-up">
-        <div class="story-inner">
-          <div>
-            <h2 data-i18n="storyTitle">A Real Knitting Mill</h2>
-            <p data-i18n="story1">We have been knitting for other brands since 2010 — sweaters for labels you would recognize. The machines are ours. The hands are ours. The wool comes straight from the Australian market.</p>
-            <p data-i18n="story2">Last year we stopped making clothes for other people's labels and started making them for ours. Same line, same hands — minus the markup.</p>
-            <div class="story-facts">
-              <div class="fact"><div class="num" data-i18n="f1n">16</div><div class="label" data-i18n="f1l">Years of Knitting</div></div>
-              <div class="fact"><div class="num" data-i18n="f2n">100%</div><div class="label" data-i18n="f2l">Merino Wool</div></div>
-              <div class="fact"><div class="num" data-i18n="f3n">300</div><div class="label" data-i18n="f3l">Pieces per Style</div></div>
-            </div>
-          </div>
-          <div class="story-art" id="storyArt"></div>
-        </div>
-      </div>
+  <!-- Lookbook：全幅编辑区 -->
+  <section class="lookbook">
+    <img class="parallax" data-speed="0.12" src="assets/img/lookbook.jpg" alt="Lookbook">
+    <div class="lookbook-content fade-up">
+      <span class="label" data-i18n="lookLabel">The Mill</span>
+      <h2 data-i18n="lookTitle">From yarn to sweater, all in one room.</h2>
+      <p data-i18n="lookText">One floor. Eight machines. Two dozen hands. The whole journey happens here, and you can tell in the way the seams sit.</p>
+      <a class="btn btn-on-photo" href="products.html" data-i18n="lookBtn">Shop the Collection</a>
     </div>
   </section>
 
-  <section class="newsletter">
+  <!-- 分类 -->
+  <section class="section" style="padding-top:var(--space-5)">
     <div class="container">
-      <div class="newsletter-box fade-up">
-        <h2 data-i18n="newsTitle">New Arrivals, First</h2>
-        <p data-i18n="newsText">New styles go to our email list before they hit the site. One email a month, max.</p>
-        <form class="news-form" id="newsForm">
-          <input type="email" id="newsEmail" data-i18n-ph="newsPh" placeholder="Your email" aria-label="Email" required>
-          <button class="btn btn-primary" type="submit" data-i18n="newsBtn">Subscribe</button>
-        </form>
-        <p class="news-msg" id="newsMsg"></p>
+      <div class="cats fade-up" id="cats"></div>
+    </div>
+  </section>
+
+  <!-- 故事 -->
+  <section class="section" id="story">
+    <div class="container story-grid">
+      <div class="fade-up">
+        <span class="label" data-i18n="storyLabel">Our Story</span>
+        <h2 data-i18n="storyTitle">A real knitting mill.</h2>
+        <p data-i18n="story1">We have been knitting for other brands since 2010 — sweaters for labels you would recognize. The machines are ours. The hands are ours. The wool comes straight from the Australian market.</p>
+        <p data-i18n="story2">Last year we stopped making clothes for other people's labels and started making them for ours. Same line, same hands — minus the markup.</p>
+        <div class="story-facts">
+          <div class="fact"><div class="num" data-i18n="f1n">16</div><span class="label" data-i18n="f1l">Years of Knitting</span></div>
+          <div class="fact"><div class="num" data-i18n="f2n">100%</div><span class="label" data-i18n="f2l">Merino Wool</span></div>
+          <div class="fact"><div class="num" data-i18n="f3n">300</div><span class="label" data-i18n="f3l">Pieces per Style</span></div>
+        </div>
       </div>
+      <div class="story-photo fade-up d1"><img src="assets/img/story.jpg" alt="Wool yardage at the mill"></div>
+    </div>
+  </section>
+
+  <!-- 订阅 -->
+  <section class="newsletter">
+    <div class="container newsletter-inner fade-up">
+      <span class="label" data-i18n="newsTitle">New Arrivals, First</span>
+      <h2 data-i18n="newsTitle2">先到先得</h2>
+      <p data-i18n="newsText">New styles go to our email list before they hit the site. One email a month, max.</p>
+      <form class="news-form" id="newsForm">
+        <input type="email" id="newsEmail" data-i18n-ph="newsPh" placeholder="Your email" aria-label="Email" required>
+        <button class="btn" type="submit" data-i18n="newsBtn">Subscribe</button>
+      </form>
+      <p class="news-msg" id="newsMsg"></p>
     </div>
   </section>
 </main>
@@ -103,7 +121,7 @@
     <div class="footer-grid">
       <div>
         <a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.png" alt="FanFlo"><span class="brand-cn">繁花毛织</span></a>
-        <p style="margin-top:10px;font-size:14px;color:var(--ink-soft);max-width:36ch;" data-i18n="footerTag">Knitwear straight from our own mill — yarn, knitting, shipping, all ours.</p>
+        <p style="margin-top:10px;font-size:13px;color:var(--graphite);max-width:34ch;" data-i18n="footerTag">Knitwear straight from our own mill — yarn, knitting, shipping, all ours.</p>
       </div>
       <div>
         <h4 data-i18n="footShop">Shop</h4>
@@ -119,6 +137,14 @@
         <ul>
           <li><a href="mailto:hello@fanflo.example">hello@fanflo.example</a></li>
           <li><a href="index.html#story" data-i18n="navStory">Our Mill</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">WeChat</a></li>
         </ul>
       </div>
     </div>
