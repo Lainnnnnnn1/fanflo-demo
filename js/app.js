@@ -11,6 +11,12 @@ const I18N = {
     catTitle: 'Shop by Category',
     newTitle: 'New This Week',
     newHint: 'Just off the machines — 300 pieces per style, then it\'s gone.',
+    procLabel: 'The Process',
+    procTitle: 'From design to doorstep.',
+    proc1t: 'Design', proc1d: 'Patterns are drafted and graded in-house. Prototypes before production, always.',
+    proc2t: 'Sampling', proc2d: 'Your colors, your labels, your packaging — sampled before anything runs.',
+    proc3t: 'Yarn', proc3d: 'Merino and wool blends, sourced direct from the market. Bulk yarn, better price.',
+    proc4t: 'QC & Ship', proc4d: 'Every piece checked by hand before it ships. 2–3 business day turnaround.',
     storyTitle: 'A Real Knitting Mill',
     story1: 'We are a direct knitwear factory in China — not a trading company. Since 2010, every stage happens under our roof: design, yarn sourcing, knitting, quality control.',
     story2: 'That is how 1,000+ resellers and brands buy from us. The sweaters on this site come off the same machines as our private-label work.',
@@ -46,6 +52,12 @@ const I18N = {
     catTitle: '按品类逛',
     newTitle: '本周新品',
     newHint: '刚下织机的一批，每个款 300 件，卖完等下一批。',
+    procLabel: '生产流程',
+    procTitle: '从设计到你手上。',
+    proc1t: '设计', proc1d: '版型在厂内打样、放码。量产前必有样衣。',
+    proc2t: '打样', proc2d: '颜色、吊牌、包装，全部先打样再投产。',
+    proc3t: '选纱', proc3d: '美利奴与羊毛混纺，直接从市场收纱。批量进纱，价格更好。',
+    proc4t: '质检发货', proc4d: '每件出货前人工质检。2-3 个工作日发货。',
     storyTitle: '一家真的织厂',
     story1: '我们是中国直营针织厂——不是贸易公司。从 2010 年起，设计、找纱、织造、质检，全都在我们自己厂房里完成。',
     story2: '1000+ 经销商和品牌都这样从我们这里进货。这个站上的毛衣，和我们代工的是同一批机器织的。',
@@ -307,10 +319,11 @@ function initCart() {
       '<div class="cart-items" id="cartItems"></div>' +
       '<aside class="summary fade-up in">' +
         '<h3>' + t('sumTitle') + '</h3>' +
-        '<div class="sum-row"><span>' + t('sub') + '</span><span>' + fmt(subtotal) + '</span></div>' +
+        '<div class="sum-row items"><span>' + items.length + ' ' + t('pCount') + '</span><span>' + fmt(subtotal) + '</span></div>' +
         '<div class="sum-row"><span>' + t('ship') + '</span><span>' + (ship === 0 ? t('free') : fmt(ship)) + '</span></div>' +
         '<div class="sum-row total"><span>' + t('total') + '</span><span class="price">' + fmt(subtotal + ship) + '</span></div>' +
-        '<a class="btn btn-primary btn-block" href="checkout.html">' + t('checkout') + '</a>' +
+        '<a class="btn btn-dark btn-block" href="checkout.html">' + t('checkout') + '</a>' +
+        '<a class="continue" href="products.html">← ' + t('cEmptyBtn') + '</a>' +
       '</aside>' +
     '</div>';
 
@@ -318,18 +331,18 @@ function initCart() {
   box.innerHTML = items.map((i, idx) =>
     '<div class="cart-item" style="animation-delay:' + (idx * 0.05) + 's">' +
       '<div class="ci-thumb">' + productImage(i.product, '') + '</div>' +
-      '<div>' +
+      '<div class="ci-main">' +
         '<div class="ci-name">' + esc(i.product.name[LANG]) + '</div>' +
         '<div class="ci-meta">' + t('metaSize') + ' ' + esc(i.size) + ' · ' + esc(i.product.material[LANG]) + '</div>' +
-        '<div class="qty" style="border:none;padding:0">' +
+        '<div class="ci-qty">' +
           '<button type="button" data-act="minus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="minus">−</button>' +
-          '<span>' + i.qty + '</span>' +
+          '<span class="ci-qty-num">' + i.qty + '</span>' +
           '<button type="button" data-act="plus" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="plus">+</button>' +
         '</div>' +
       '</div>' +
       '<div class="ci-right">' +
+        '<button class="ci-remove" data-act="del" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '" aria-label="Remove">×</button>' +
         '<span class="ci-price">' + fmt(i.line) + '</span>' +
-        '<button class="ci-remove" data-act="del" data-id="' + i.product.id + '" data-size="' + esc(i.size) + '">' + t('remove') + '</button>' +
       '</div>' +
     '</div>'
   ).join('');

@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FanFlo 繁花毛织 — Knitted in our own factory</title>
 <meta name="description" content="Merino wool sweaters, cardigans and scarves, straight from our own knitting mill.">
-<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body data-page="home">
 
@@ -82,14 +85,41 @@
     </div>
   </section>
 
-  <!-- Lookbook：全幅编辑区 -->
-  <section class="lookbook">
-    <img class="parallax" data-speed="0.12" src="assets/img/lookbook.jpg" alt="Lookbook">
-    <div class="lookbook-content fade-up">
-      <span class="label" data-i18n="lookLabel">The Mill</span>
-      <h2 data-i18n="lookTitle">From yarn to sweater, all in one room.</h2>
-      <p data-i18n="lookText">One floor. Eight machines. Two dozen hands. The whole journey happens here, and you can tell in the way the seams sit.</p>
-      <a class="btn btn-on-photo" href="products.html" data-i18n="lookBtn">Shop the Collection</a>
+  <!-- 生产流程 -->
+  <section class="section process">
+    <div class="container">
+      <div class="section-head fade-up">
+        <div>
+          <span class="label" data-i18n="procLabel">The Process</span>
+          <h2 data-i18n="procTitle">From design to doorstep.</h2>
+        </div>
+      </div>
+      <div class="proc-grid">
+        <div class="proc-step fade-up">
+          <div class="proc-img"><img src="assets/img/proc1.jpg" alt="Design" loading="lazy"></div>
+          <span class="proc-no">01</span>
+          <h3 data-i18n="proc1t">Design</h3>
+          <p data-i18n="proc1d">Patterns are drafted and graded in-house. Prototypes before production, always.</p>
+        </div>
+        <div class="proc-step fade-up d1">
+          <div class="proc-img"><img src="assets/img/proc2.jpg" alt="Sampling" loading="lazy"></div>
+          <span class="proc-no">02</span>
+          <h3 data-i18n="proc2t">Sampling</h3>
+          <p data-i18n="proc2d">Your colors, your labels, your packaging — sampled before anything runs.</p>
+        </div>
+        <div class="proc-step fade-up d2">
+          <div class="proc-img"><img src="assets/img/proc3.jpg" alt="Yarn" loading="lazy"></div>
+          <span class="proc-no">03</span>
+          <h3 data-i18n="proc3t">Yarn</h3>
+          <p data-i18n="proc3d">Merino and wool blends, sourced direct from the market. Bulk yarn, better price.</p>
+        </div>
+        <div class="proc-step fade-up d3">
+          <div class="proc-img"><img src="assets/img/proc4.jpg" alt="QC and Ship" loading="lazy"></div>
+          <span class="proc-no">04</span>
+          <h3 data-i18n="proc4t">QC &amp; Ship</h3>
+          <p data-i18n="proc4d">Every piece checked by hand before it ships. 2–3 business day turnaround.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -172,8 +202,8 @@
   </div>
 </footer>
 
-<script src="js/data.js"></script>
-<script src="js/cart.js"></script>
-<script src="js/app.js"></script>
+<script src="js/data.js?v=6"></script>
+<script src="js/cart.js?v=6"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

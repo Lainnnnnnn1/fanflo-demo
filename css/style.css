@@ -11,8 +11,8 @@
   --linen: #eaeae8;
   --terracotta: #c96442;
   --terracotta-deep: #a8512f;
-  --font-sans: "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
-  --font-serif: "Songti SC", "STSong", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Archivo", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", "Songti SC", "STSong", "Iowan Old Style", Georgia, serif;
   --font-mono: "SF Mono", "Menlo", "Monaco", "Consolas", "Courier New", monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --space-1: 8px;
@@ -107,9 +107,9 @@ button { font-family: inherit; cursor: pointer; }
 .hero-content h1 {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(44px, 7.5vw, 104px);
-  line-height: 0.98;
-  letter-spacing: -0.01em;
+  font-size: clamp(48px, 8.5vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
   margin-bottom: var(--space-3);
   text-shadow: 0 2px 24px rgba(0,0,0,0.3);
 }
@@ -280,6 +280,16 @@ button { font-family: inherit; cursor: pointer; }
 .add-msg { margin-top: var(--space-2); font-size: 13px; color: var(--terracotta); display: none; animation: slideDown 0.35s var(--ease); }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: none } }
 
+/* ---------- 生产流程 ---------- */
+.proc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+.proc-img { aspect-ratio: 4/5; overflow: hidden; margin-bottom: var(--space-2); background: var(--linen); }
+.proc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.proc-step:hover .proc-img img { transform: scale(1.04); }
+.proc-no { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--pewter); }
+.proc-step h3 { font-size: 15px; font-weight: 600; margin: 4px 0 4px; letter-spacing: 0.01em; }
+.proc-step p { font-size: 13px; color: var(--graphite); line-height: 1.6; max-width: 32ch; }
+@media (max-width: 900px) { .proc-grid { grid-template-columns: repeat(2, 1fr); } }
+
 /* ---------- 购物车 ---------- */
 .cart-page { padding: var(--space-6) 0; min-height: 60vh; }
 .cart-page h1 { font-family: var(--font-serif); font-size: clamp(28px, 3.4vw, 44px); font-weight: 500; margin-bottom: var(--space-5); }
@@ -287,22 +297,31 @@ button { font-family: inherit; cursor: pointer; }
 .cart-empty .big { font-family: var(--font-serif); font-size: 30px; color: var(--carbon); margin-bottom: var(--space-1); }
 .cart-layout { display: grid; grid-template-columns: 1fr 320px; gap: var(--space-4); align-items: start; }
 .cart-items { display: flex; flex-direction: column; }
-.cart-item { display: grid; grid-template-columns: 96px 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--mist); align-items: center; animation: itemIn 0.4s var(--ease); }
+.cart-item { display: grid; grid-template-columns: 88px 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--mist); align-items: center; animation: itemIn 0.4s var(--ease); transition: background 0.2s var(--ease); }
 @keyframes itemIn { from { opacity: 0; transform: translateX(12px) } to { opacity: 1; transform: none } }
 .cart-item:last-child { border-bottom: 1px solid var(--mist); }
-.cart-item .ci-thumb { width: 96px; aspect-ratio: 4/5; overflow: hidden; background: var(--linen); }
+.cart-item .ci-thumb { width: 88px; aspect-ratio: 4/5; overflow: hidden; background: var(--linen); flex-shrink: 0; }
 .cart-item .ci-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.ci-main { min-width: 0; }
 .ci-name { font-size: 14px; font-weight: 500; }
 .ci-meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pewter); margin: 4px 0 10px; }
-.ci-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-.ci-price { font-size: 14px; font-weight: 500; }
-.ci-remove { background: none; border: none; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pewter); text-decoration: underline; }
-.ci-remove:hover { color: var(--carbon); }
-.summary { border: 1px solid var(--mist); padding: var(--space-3); position: sticky; top: 84px; }
+.ci-qty { display: inline-flex; align-items: center; border: 1px solid var(--mist); border-radius: 2px; }
+.ci-qty button { width: 34px; height: 34px; background: transparent; border: none; font-size: 15px; color: var(--carbon); transition: background 0.2s var(--ease); }
+.ci-qty button:hover { background: var(--linen); }
+.ci-qty-num { min-width: 36px; text-align: center; font-family: var(--font-mono); font-size: 13px; }
+.ci-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.ci-price { font-family: var(--font-mono); font-size: 14px; font-weight: 500; }
+.ci-remove { background: none; border: none; font-size: 16px; line-height: 1; color: var(--pewter); transition: color 0.2s var(--ease), transform 0.2s var(--ease); padding: 4px; }
+.ci-remove:hover { color: var(--carbon); transform: scale(1.15); }
+.summary { border: 1px solid var(--mist); padding: var(--space-3); position: sticky; top: 84px; background: var(--canvas); }
 .summary h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: var(--space-3); }
 .sum-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--graphite); padding: 6px 0; }
+.sum-row.items { border-bottom: 1px solid var(--line); }
 .sum-row.total { border-top: 1px solid var(--mist); margin-top: var(--space-2); padding-top: var(--space-2); font-size: 15px; color: var(--carbon); font-weight: 500; }
+.sum-row.total .price { font-family: var(--font-mono); }
 .summary .btn { margin-top: var(--space-3); }
+.summary .continue { display: block; text-align: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pewter); margin-top: var(--space-2); }
+.summary .continue:hover { color: var(--carbon); }
 
 /* ---------- 结账 ---------- */
 .checkout-page { padding: var(--space-6) 0; min-height: 60vh; }
