@@ -3,7 +3,7 @@
 :root {
   --canvas: #ffffff;
   --canvas-warm: #faf9f6;
-  --carbon: #000000;
+  --carbon: #0a0a0a;
   --slate: #333333;
   --graphite: #666666;
   --pewter: #9a9a9a;
@@ -87,31 +87,45 @@ button { font-family: inherit; cursor: pointer; }
 }
 .lang-switch button.active { background: var(--carbon); color: var(--canvas); }
 
-/* ---------- Hero：全视口全幅摄影 ---------- */
+/* ---------- Hero：非对称分割（taste-skill: ANTI-CENTER） ---------- */
 .hero { position: relative; height: 92vh; min-height: 560px; overflow: hidden; }
 .hero-photo { position: absolute; inset: 0; will-change: transform; }
-.hero-photo img { width: 100%; height: 120%; object-fit: cover; transform: translateY(-8%); }
+.hero-photo img { width: 100%; height: 120%; object-fit: cover; transform: translateY(-8%); animation: kenburns 18s ease-out forwards; }
+@keyframes kenburns { from { transform: translateY(-8%) scale(1.08) } to { transform: translateY(-8%) scale(1) } }
 .hero-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 45%);
+  background: linear-gradient(to right, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.15) 55%, transparent 75%);
 }
 .hero-content {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 0 var(--space-3) var(--space-6);
+  position: absolute; left: 0; bottom: 0;
+  padding: 0 var(--space-3) var(--space-6) max(var(--space-3), 5vw);
   color: var(--canvas);
-  text-align: center;
+  text-align: left;
+  max-width: 780px;
 }
 .hero-content .label { color: rgba(255,255,255,0.85); display: block; margin-bottom: var(--space-2); }
 .hero-content h1 {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(40px, 7vw, 88px);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
+  font-size: clamp(44px, 7.5vw, 104px);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
   margin-bottom: var(--space-3);
   text-shadow: 0 2px 24px rgba(0,0,0,0.3);
 }
-.hero-content .sub { font-size: 15px; color: rgba(255,255,255,0.9); margin-bottom: var(--space-4); letter-spacing: 0.02em; }
+.hero-content .sub { font-size: 15px; color: rgba(255,255,255,0.9); margin-bottom: var(--space-4); letter-spacing: 0.02em; max-width: 44ch; }
+
+/* 旋转印章（signature） */
+.hero-stamp { position: absolute; top: 32px; right: 32px; width: 108px; height: 108px; opacity: 0.92; }
+.hero-stamp svg { width: 100%; height: 100%; animation: spin 24s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+
+/* 纱线色板条（yarn swatch rail） */
+.yarn-rail { display: flex; height: 10px; }
+.yarn-rail span { flex: 1; }
+
+/* 缝线虚线分隔（stitch） */
+.stitch { border: none; border-top: 2px dashed #d6d6d6; margin: 0; }
 
 /* ---------- 按钮：黑/白反色，锐角 ---------- */
 .btn {
@@ -155,7 +169,9 @@ button { font-family: inherit; cursor: pointer; }
 .cat .idx { color: var(--pewter); font-size: 10px; }
 
 /* ---------- 商品卡：白底无框，全出血图 ---------- */
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3) var(--space-3); }
+.grid .card:nth-child(even) { margin-top: 56px; }
+@media (max-width: 900px) { .grid .card:nth-child(even) { margin-top: 0; } }
 .card { background: var(--canvas); }
 .card a { display: block; }
 .thumb { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--linen); }
