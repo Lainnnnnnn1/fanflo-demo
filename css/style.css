@@ -194,6 +194,7 @@ button { font-family: inherit; cursor: pointer; }
 .thumb .img-b { opacity: 0; }
 .card:hover .thumb .img-a { opacity: 0; transform: scale(1.04); }
 .card:hover .thumb .img-b { opacity: 1; transform: scale(1.04); }
+.card.no-swap:hover .thumb .img-a { opacity: 1; }
 .thumb .tag {
   position: absolute; top: 12px; left: 12px;
   background: var(--carbon); color: var(--canvas);
